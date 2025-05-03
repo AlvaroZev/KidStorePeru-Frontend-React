@@ -20,7 +20,11 @@ const SIDEBAR_ITEMS = [
 
 const Sidebar = () => {
 	const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-
+	
+	//if route is /, set isSidebarOpen to false
+	if (window.location.pathname === "/") {
+		return (<></>)
+	}
 	return (
 		<motion.div
 			className={`relative z-10 transition-all duration-300 ease-in-out flex-shrink-0 ${
