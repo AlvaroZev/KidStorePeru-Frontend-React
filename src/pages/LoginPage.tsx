@@ -3,12 +3,18 @@ import { motion } from "framer-motion";
 import { User, Key } from "lucide-react";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { genSaltSync, hashSync } from "bcrypt-ts";
+import React from "react";
+import { API_URL } from "../App";
+
 
 const LoginPage = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
     const [session, setSession] = useState(Cookies.get("session") || null);
+    const salt = genSaltSync(14);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -16,28 +22,31 @@ const LoginPage = () => {
 
         try {
             const formData = new URLSearchParams();
+            const hashedPassword = hashSync(password, salt);
             formData.append("user", username);
             formData.append("password", password);
 
             const res = await axios.post(
-                "https://kidstoreperu-backend-dev.up.railway.app/loginForm",
+                `${API_URL}/loginform`,
                 formData,
                 {
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded",
+                        //"Access-Control-Allow-Origin": "*",
                     },
                     withCredentials: true, // important if you expect cookies from the backend
                 }
             );
             if (res.data.token) {
+                
                 Cookies.set("session", res.data.token, {
                     expires: 30, // 30 days
                     secure: true,
                     sameSite: "Strict",
                 });
                 setSession(res.data.token);
+                console.log("Login success", res.data);
             }
-            console.log("Login success", res.data);
             // Redirect to dashboard or set auth state
         } catch (err) {
             console.error(err);
@@ -89,13 +98,20 @@ const LoginPage = () => {
                         <div className='relative'>
                             <Key className='absolute left-3 top-2.5 text-gray-400' size={20} />
                             <input
-                                type='password'
+                                type={showPassword ? "text" : "password"}
                                 id='password'
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className='w-full pl-10 pr-4 py-2 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'
+                                className='w-full pl-10 pr-10 py-2 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'
                                 placeholder='Ingresa tu contraseña'
                             />
+                            <button
+                                type='button'
+                                onClick={() => setShowPassword(!showPassword)}
+                                className='absolute right-2 top-2.5 text-sm text-blue-400 hover:text-blue-300 focus:outline-none'
+                            >
+                                {showPassword ? "Ocultar" : "Mostrar"}
+                            </button>
                         </div>
                     </div>
 

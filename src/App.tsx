@@ -12,19 +12,42 @@ import LoginPage from "./pages/LoginPage";
 import React, { useEffect, useState } from "react";
 import ProtectedRoute from "./components/navigation/ProtectedRoute";
 import Cookies from "js-cookie";
+import LogoutPage from "./pages/LogoutPage";
+import FortniteAccountsPage from "./pages/GameAccountsPage";
+import { jwtDecode } from "jwt-decode";
 
+export const API_URL =  "http://127.0.0.1:8080";
+//export const API_URL =  "https://kidstoreperu-backend-dev.up.railway.app";
+interface SessionPayload {
+  admin?: boolean;
+  exp: number;
+  user_id: string;
+  username: string;
+}
 
 function App() {
 	const [isAuthenticated, setIsAuthenticated] = useState(!!Cookies.get("session"));
+	  const [isAdmin, setIsAdmin] = useState(false);
 
-	useEffect(() => {
-		const interval = setInterval(() => {
-			const session = Cookies.get("session");
-			setIsAuthenticated(!!session);
-		}, 1000); // Check every second
+useEffect(() => {
+    const session = Cookies.get("session");
+    setIsAuthenticated(!!session);
 
-		return () => clearInterval(interval);
-	}, []);
+    if (session) {
+      try {
+        const decoded = jwtDecode<SessionPayload>(session);
+		console.log("Decoded session:", decoded);
+        setIsAdmin(decoded.admin === true);
+      } catch (err) {
+        console.error("Failed to decode session cookie:", err);
+        setIsAdmin(false);
+      }
+    } else {
+      setIsAdmin(false);
+    }
+
+}, []);
+
 	return (
 		<div className='flex h-screen bg-gray-900 text-gray-100 overflow-hidden'>
 			{/* BG */}
@@ -32,20 +55,21 @@ function App() {
 				<div className='absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 opacity-80' />
 				<div className='absolute inset-0 backdrop-blur-sm' />
 			</div>
-			{isAuthenticated && <Sidebar />}
+			{isAuthenticated && <Sidebar admin={isAdmin} />}
 
 			<Routes>
 				<Route path='/' element={<LoginPage />} />
 				<Route
-					path='/products'
+					path='/gifts'
 					element={
 						<ProtectedRoute>
 							<ProductsPage />
 						</ProtectedRoute>
 					}
 				/>
+				{isAdmin ? (<>
 				<Route
-					path='/users'
+					path='/usersadminaccounts'
 					element={
 						<ProtectedRoute>
 							<UsersPage />
@@ -53,13 +77,24 @@ function App() {
 					}
 				/>
 				<Route
-					path='/sales'
+					path='/fortniteadminaccounts'
 					element={
 						<ProtectedRoute>
-							<SalesPage />
+							<FortniteAccountsPage />
 						</ProtectedRoute>
 					}
 				/>
+				</>) : null}
+				<Route
+					path='/fortniteaccounts'
+					element={
+						<ProtectedRoute>
+							<FortniteAccountsPage />
+						</ProtectedRoute>
+					}
+				/>
+
+				
 				<Route
 					path='/orders'
 					element={
@@ -81,6 +116,14 @@ function App() {
 					element={
 						<ProtectedRoute>
 							<SettingsPage />
+						</ProtectedRoute>
+					}
+				/>
+				<Route
+					path='/logout'
+					element={
+						<ProtectedRoute>
+							<LogoutPage />
 						</ProtectedRoute>
 					}
 				/>

@@ -6,6 +6,7 @@ import { CreditCard, DollarSign, ShoppingCart, TrendingUp } from "lucide-react";
 import SalesOverviewChart from "../components/sales/SalesOverviewChart";
 import SalesByCategoryChart from "../components/sales/SalesByCategoryChart";
 import DailySalesTrend from "../components/sales/DailySalesTrend";
+import React from "react";
 
 const salesStats = {
 	totalRevenue: "$1,234,567",
