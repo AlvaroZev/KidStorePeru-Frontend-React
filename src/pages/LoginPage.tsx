@@ -7,7 +7,6 @@ import { genSaltSync, hashSync } from "bcrypt-ts";
 import React from "react";
 import { API_URL } from "../App";
 
-
 const LoginPage = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -38,7 +37,7 @@ const LoginPage = () => {
                 }
             );
             if (res.data.token) {
-                
+
                 Cookies.set("session", res.data.token, {
                     expires: 30, // 30 days
                     secure: true,

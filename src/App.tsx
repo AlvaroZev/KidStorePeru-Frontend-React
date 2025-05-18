@@ -15,9 +15,10 @@ import Cookies from "js-cookie";
 import LogoutPage from "./pages/LogoutPage";
 import FortniteAccountsPage from "./pages/GameAccountsPage";
 import { jwtDecode } from "jwt-decode";
+import FortniteAdminAccountsPage from "./pages/AdminGameAccountsPage";
 
-//export const API_URL =  "http://127.0.0.1:8080";
-export const API_URL =  "https://kidstoreperu-backend-dev.up.railway.app";
+export const API_URL =  "http://127.0.0.1:8080";
+//export const API_URL =  "https://kidstoreperu-backend-dev.up.railway.app";
 interface SessionPayload {
   admin?: boolean;
   exp: number;
@@ -80,7 +81,7 @@ useEffect(() => {
 					path='/fortniteadminaccounts'
 					element={
 						<ProtectedRoute>
-							<FortniteAccountsPage />
+							<FortniteAdminAccountsPage />
 						</ProtectedRoute>
 					}
 				/>

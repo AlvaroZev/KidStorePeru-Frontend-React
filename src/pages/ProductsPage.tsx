@@ -12,6 +12,7 @@ import Cookies from "js-cookie";
 import AccountCard from '../components/products/AccountCard';
 import GiftModal from '../components/products/GiftModal';
 import { Account } from '../components/accounts';
+import { Friend } from '../components/products/GiftModal';
 
 // types/ShopTypes.ts
 export interface ShopResponse {
@@ -68,8 +69,6 @@ const ProductsPage: React.FC = () => {
 
 
 	useEffect(() => {
-
-
 		fetchShop();
 		fetchAccounts();
 	}, []);
@@ -162,9 +161,9 @@ const ProductsPage: React.FC = () => {
 					onClose={() => setShowGiftModal(false)}
 					selectedItem={selectedItem}
 					selectedAccount={selectedAccount}
-					onSend={(recipient, creatorCode, quantity) => {
-						console.log(`Enviando ${quantity} ${selectedItem?.itemDisplay?.name} a ${recipient}`);
-						setShowGiftModal(false);
+					onSend={(recipient: Friend, creatorCode: string ) => {
+				console.log(`Enviando ${creatorCode} ${selectedItem?.itemDisplay?.name} a ${recipient}`);
+			setShowGiftModal(false);
 					}}
 				/>
 			)}
