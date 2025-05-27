@@ -17,7 +17,7 @@ import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 
-export const API_URL = "http://127.0.0.1:8080";
+export const API_URL =  "https://kidstoreperu-backend-dev.up.railway.app";
 
 interface SessionPayload {
   admin?: boolean;
