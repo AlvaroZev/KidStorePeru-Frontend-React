@@ -55,9 +55,9 @@ const LoginPage = () => {
 
     // Check if the user is already logged in
     useEffect(() => {
-        if (session && session !== "") {
+        if (session) {
             // Redirect to dashboard or set auth state
-            window.location.href = "/products";
+            window.location.href = "/gifts";
             console.log("User is already logged in");
         }
     }, [session]);

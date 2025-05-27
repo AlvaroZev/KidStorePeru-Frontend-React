@@ -56,6 +56,13 @@ const GiftModal: React.FC<GiftModalProps> = ({ onClose, selectedItem, selectedAc
 
       // Manejo de respuesta de error
       if (data.error) {
+        if (data.error === "Could not refresh access token") {
+          //close modal and redirect to users
+          onClose();
+          window.location.href = "/fortniteaccounts";
+          return;
+        }
+
         setSearchStatus("error");
         setSearchResult(null);
         setErrorMessage(data.error);

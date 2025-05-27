@@ -13,6 +13,7 @@ import AccountCard from '../components/products/AccountCard';
 import GiftModal from '../components/products/GiftModal';
 import { Account } from '../components/accounts';
 import { Friend } from '../components/products/GiftModal';
+import { s } from 'framer-motion/client';
 
 // types/ShopTypes.ts
 export interface ShopResponse {
@@ -28,6 +29,7 @@ export interface ShopResponse {
 export interface ShopEntry {
 	regularPrice: number;
 	finalPrice: number;
+	offerId?: string;
 	layout?: { name?: string };
 	bundle?: { name: string; image: string };
 	newDisplayAsset?: {
@@ -66,7 +68,8 @@ const ProductsPage: React.FC = () => {
 	const [loading, setLoading] = useState(true);
 	const token = Cookies.get("session");
 	const [showGiftModal, setShowGiftModal] = useState(false);
-
+	const [showSuccessModal, setShowSuccessModal] = useState(false);
+	const [showErrorModal, setShowErrorModal] = useState(false);
 
 	useEffect(() => {
 		fetchShop();
@@ -95,6 +98,7 @@ const ProductsPage: React.FC = () => {
 				const displayItem: ShopEntry = {
 					regularPrice: entry.regularPrice,
 					finalPrice: entry.finalPrice,
+					offerId: entry.offerId,
 					itemDisplay: {
 						name,
 						image,
@@ -118,6 +122,44 @@ const ProductsPage: React.FC = () => {
 			setLoading(false);
 		}
 	};
+
+	const sendGift = async (recipient: Friend, creatorCode: string) => {
+		if (!selectedItem || !selectedAccount) return;
+
+		try {
+			const res = await axios.post(
+				`${API_URL}/sendGift`,
+				{
+					account_id: selectedAccount.id,
+					sender_username: selectedAccount.displayName,
+					receiver_id: recipient.id,
+					receiver_username: recipient.username,
+					gift_id:  selectedItem.offerId || '',
+					gift_price: selectedItem.finalPrice,
+					gift_name: selectedItem.itemDisplay?.name || 'Sin nombre',
+					message: `¡Disfruta tu regalo de ${selectedAccount.displayName}!`,
+					gift_image: selectedItem.itemDisplay?.image || '',
+					creator_code: creatorCode, // Añadir el código de creador
+
+				},
+				{ headers: { Authorization: `Bearer ${token}` } }
+			);
+
+			if (res.status === 200) {
+				setShowGiftModal(false);
+				setShowSuccessModal(true);
+
+				console.log(`Gift sent successfully to ${recipient.username}`);
+			} else {
+				
+				console.error('Error sending gift:', res.data);
+			}
+		} catch (err) {
+			setShowErrorModal(true);
+				setShowGiftModal(false);
+			console.error('Error sending gift', err);
+		}
+	}
 
 	const fetchAccounts = async () => {
 		try {
@@ -161,11 +203,57 @@ const ProductsPage: React.FC = () => {
 					onClose={() => setShowGiftModal(false)}
 					selectedItem={selectedItem}
 					selectedAccount={selectedAccount}
-					onSend={(recipient: Friend, creatorCode: string ) => {
-				console.log(`Enviando ${creatorCode} ${selectedItem?.itemDisplay?.name} a ${recipient}`);
-			setShowGiftModal(false);
+					onSend={(recipient: Friend, creatorCode: string) => {
+						if (!selectedItem || !selectedAccount) return;
+						sendGift(recipient, creatorCode);
+						console.log(`Enviando ${creatorCode} ${selectedItem?.itemDisplay?.name} a ${recipient}`);
+						
 					}}
 				/>
+			)}
+
+			{showErrorModal && (
+				<motion.div
+					className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50'
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					exit={{ opacity: 0 }}
+				>
+					<motion.div
+						className='bg-gray-800 rounded-2xl p-6 w-full max-w-md'
+						initial={{ scale: 0.8 }}
+						animate={{ scale: 1 }}
+						exit={{ scale: 0.8 }}
+					>
+						<h2 className='text-xl text-red-500 mb-4'>Error</h2>
+						<p className='mb-2 text-white'>No se pudo enviar el regalo. Por favor, inténtalo de nuevo más tarde.</p>
+						<button onClick={() => setShowErrorModal(false)} className='px-4 py-2 bg-gray-600 rounded text-white'>
+							Cerrar
+						</button>
+					</motion.div>
+				</motion.div>
+			)}
+
+			{showSuccessModal && (
+				<motion.div
+					className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50'
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					exit={{ opacity: 0 }}
+				>
+					<motion.div
+						className='bg-gray-800 rounded-2xl p-6 w-full max-w-md'
+						initial={{ scale: 0.8 }}
+						animate={{ scale: 1 }}
+						exit={{ scale: 0.8 }}
+					>
+						<h2 className='text-xl text-white mb-4'>Éxito</h2>
+						<p className='mb-2 text-white'>El regalo se ha enviado correctamente.</p>
+						<button onClick={() => setShowSuccessModal(false)} className='px-4 py-2 bg-gray-600 rounded text-white'>
+							Cerrar
+						</button>
+					</motion.div>
+				</motion.div>
 			)}
 
 			<motion.div

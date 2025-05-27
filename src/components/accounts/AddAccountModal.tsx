@@ -40,7 +40,10 @@ const AddAccountModal: React.FC<Props> = ({ onClose, onSuccess }) => {
     <motion.div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <motion.div className="bg-gray-800 rounded-2xl p-6 w-full max-w-md">
         <h2 className="text-xl text-white mb-4 text-center">Vincular Cuenta de Fortnite</h2>
-
+        <p className="text-sm text-red-400 mb-4 text-center font-semibold">
+  ⚠️ IMPORTANTE: Abre los siguientes enlaces en una ventana de incógnito. 
+  Esto es obligatorio para evitar conflictos con cuentas agregadas previamente.
+</p>
         <ol className="text-sm text-gray-300 mb-4 list-decimal list-inside space-y-2">
           <li>Inicia sesión en <a href="https://accounts.epicgames.com/login/" target="_blank" className="text-blue-400 underline">accounts.epicgames.com</a></li>
           <li>

@@ -21,10 +21,10 @@ const FortniteAdminAccountsPage = () => {
 
 			if (res.data && res.data.length !== 0) {
 				const parsedAccounts: Account[] = res.data.map((acc: any) => ({
-					id: acc.id,
-					displayName: acc.displayName,
-					pavos: acc.pavos ?? 0,
-					remainingGifts: acc.remainingGifts ?? 0,
+					id: acc.ID,
+					displayName: acc.DisplayName,
+					pavos: acc.PaVos ?? 0,
+					remainingGifts: acc.RemainingGifts ?? 0,
 				}));
 				console.log("Fetched accounts:", parsedAccounts);
 				setAccounts(parsedAccounts);
