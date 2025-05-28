@@ -25,6 +25,8 @@ const ItemCard: React.FC<Props> = ({ item, onClick, selected }) => {
             onClick(item);
         }
     };
+
+	const itemIsBundle = item.bundle && item.bundle.name && item.bundle.image;
 	return (
 		<div
 			onClick={handleClick}
@@ -33,7 +35,7 @@ const ItemCard: React.FC<Props> = ({ item, onClick, selected }) => {
 			} bg-gray-900 hover:border-blue-500`}
 		>
 			<img src={item?.itemDisplay?.image} alt={item.itemDisplay?.name} className='w-full h-36 object-contain rounded mb-2' />
-			<p className='font-semibold text-white'>{item.itemDisplay?.name}</p>
+			{ itemIsBundle? <p className='font-semibold text-white'>[Lote]{item.itemDisplay?.name}</p> :<p className='font-semibold text-white'>{item.itemDisplay?.name}</p>}
 			<p className='text-sm text-gray-400'>{item.itemDisplay?.rarity}</p>
 			<p className='text-blue-400 mt-1'>{item.itemDisplay?.vBucks} V-Bucks</p>
 		</div>

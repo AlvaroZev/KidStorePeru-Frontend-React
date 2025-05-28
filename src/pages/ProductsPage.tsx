@@ -200,7 +200,7 @@ const ProductsPage: React.FC = () => {
 		<div className='w-screen min-h-screen bg-gray-900 pt-20 px-6 overflow-y-auto'>
 			{showGiftModal && (
 				<GiftModal
-					onClose={() => setShowGiftModal(false)}
+					onClose={() => {setShowGiftModal(false);fetchAccounts();}}
 					selectedItem={selectedItem}
 					selectedAccount={selectedAccount}
 					onSend={(recipient: Friend, creatorCode: string) => {

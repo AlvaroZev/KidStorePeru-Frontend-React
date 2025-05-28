@@ -19,6 +19,7 @@ const OrdersPage: React.FC = () => {
 			const data: Transaction[] = res.data.map((tx: any) => ({
 				id: tx.ID,
 				gameAccountID: tx.GameAccountID,
+				senderName: tx.SenderName || null,
 				receiverID: tx.ReceiverID,
 				receiverName: tx.ReceiverName,
 				objectStoreID: tx.ObjectStoreID,

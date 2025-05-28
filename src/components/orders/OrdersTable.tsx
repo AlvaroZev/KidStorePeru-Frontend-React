@@ -29,7 +29,7 @@ const OrdersTable: React.FC<Props> = ({ transactions }) => {
                 <td className="px-4 py-2 text-gray-200">{tx.senderName}</td>
                 <td className="px-4 py-2 text-gray-200">{tx.receiverName || "N/A"}</td>
                 <td className="px-4 py-2 text-gray-200">
-                  <span className="line-through text-red-400 mr-2">{tx.regularPrice}</span>
+                  {/* <span className="line-through text-red-400 mr-2">{tx.regularPrice}</span> */}
                   <span className="text-green-400">{tx.finalPrice}</span>
                 </td>
                 <td className="px-4 py-2">
