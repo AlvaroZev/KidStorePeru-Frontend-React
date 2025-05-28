@@ -87,7 +87,10 @@ const ProductsPage: React.FC = () => {
 				const item = entry.brItems?.[0];
 				if (!item) return;
 
-				const name = item.name || 'Sin nombre';
+				//if bundle, add [Lote] prefix
+				const name = entry.bundle && entry.bundle.name && entry.bundle.image
+					? `[Lote] ${entry.bundle.name}`
+					: item.name || 'Objeto sin nombre';
 				const image =
 					entry.newDisplayAsset?.renderImages?.[0]?.image ||
 					entry.bundle?.image ||
