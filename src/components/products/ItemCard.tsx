@@ -22,8 +22,12 @@ const ItemCard: React.FC<Props> = ({ item, selected, onClick }) => {
         alt={display?.name}
         className="w-full h-36 object-contain rounded mb-2"
       />
-      <div className="text-white font-semibold">{display?.name}</div>
-      <div className="text-sm text-gray-400">{display?.rarity}</div>
+      <div className="text-white font-semibold text-sm leading-tight line-clamp-2" title={display?.name}>
+        {display?.name}
+      </div>
+      <div className="text-sm text-gray-400 line-clamp-2" title={display?.type}>
+        {display?.type}
+      </div>
       <div className="text-blue-400 mt-1">{display?.vBucks} V-Bucks</div>
     </div>
   );

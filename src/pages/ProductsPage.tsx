@@ -318,6 +318,7 @@ export interface ShopEntry {
 	offerId?: string;
 	itemDisplay: {
 		name: string;
+		type: string;
 		image: string;
 		vBucks: number;
 		rarity: string;
@@ -346,32 +347,61 @@ const ProductsPage: React.FC = () => {
 	const fetchShop = async () => {
 		try {
 			const res = await fetch('https://fortnite-api.com/v2/shop?language=es-419');
-			const json : RawEntry = await res.json();
+			const json: RawEntry = await res.json();
 			const entries = json.data?.entries || [];
 
 			const categoryMap: Record<string, ShopEntry[]> = {};
 
 			entries.forEach((entry) => {
-				const category = entry.layout?.name || 'Otros';
-				const item = entry.brItems?.[0];
+				const layout = entry.layout || {
+					name: 'Otros',
+				};
+				const category = layout.name || 'Otros';
+
+				// Prefer brItems[0], but fallback to cars, instruments, tracks, legoKits
+				const item =
+					entry.brItems?.[0] ||
+					entry.cars?.[0] ||
+					entry.instruments?.[0] ||
+					entry.tracks?.[0] ||
+					entry.legoKits?.[0];
+
 				if (!item) return;
 
-				const name = entry.bundle?.name ? `${entry.bundle.name}` : item.name;
+				const name =
+					entry.bundle?.name ||
+					// Use devName if no item.name exists
+					(item as any).name || (item as any).title || entry.devName || 'Sin nombre';
+
 				const image =
 					entry.newDisplayAsset?.renderImages?.[0]?.image ||
 					entry.bundle?.image ||
-					item.images?.icon ||
-					'';
-				const rarity = item.rarity?.displayValue || 'Común';
+					(item as any).images?.icon ||
+					(item as any).images?.small ||
+					(item as any).images?.large ||
+					(item as any).albumArt ||
+					''; // Fallback to empty string
+
+				const rarity =
+					(item as any).rarity?.displayValue ||
+					(item as any).rarity?.value ||
+					'Común';
+				const type =
+				    entry.bundle?.info ||
+					(item as any).type?.displayValue ||
+					(item as any).type?.value ||
+					entry.layout?.name ||
+					'Desconocido';
 
 				const displayItem: ShopEntry = {
-					regularPrice: entry.regularPrice,
-					finalPrice: entry.finalPrice,
-					offerId: entry.offerId,
+					regularPrice: entry.regularPrice ?? 0,
+					finalPrice: entry.finalPrice ?? 0,
+					offerId: entry.offerId ?? 'unknown-offer',
 					itemDisplay: {
 						name,
+						type,
 						image,
-						vBucks: entry.finalPrice,
+						vBucks: entry.finalPrice ?? 0,
 						rarity,
 						category,
 					},
@@ -424,7 +454,7 @@ const ProductsPage: React.FC = () => {
 		}
 	};
 
-		const fetchAccounts = async () => {
+	const fetchAccounts = async () => {
 		try {
 			const res = await axios.get(`${API_URL}/fortniteaccountsofuser`, {
 				headers: { Authorization: `Bearer ${token}` },
@@ -516,7 +546,7 @@ const ProductsPage: React.FC = () => {
 						return (
 							<div key={category} className='mb-12'>
 								<h3 className='text-xl font-bold mb-4 uppercase text-center'>{category}</h3>
-								<div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4'>
+								<div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4'>
 									{filtered.map((item, idx) => (
 										<ItemCard key={idx} item={item} onClick={handleItemClick} />
 									))}
