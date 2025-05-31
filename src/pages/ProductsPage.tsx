@@ -1,63 +1,329 @@
-import ItemCard from '../components/products/ItemCard';
-
-
-
-
-// pages/ProductsPage.tsx
+// ProductsPage.tsx
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { API_URL } from '../App';
 import axios from 'axios';
-import Cookies from "js-cookie";
+import Cookies from 'js-cookie';
+import { API_URL } from '../App';
+import ItemCard from '../components/products/ItemCard';
 import AccountCard from '../components/products/AccountCard';
 import GiftModal from '../components/products/GiftModal';
 import { Account } from '../components/accounts';
 import { Friend } from '../components/products/GiftModal';
-import { s } from 'framer-motion/client';
 
-// types/ShopTypes.ts
-export interface ShopResponse {
+// --- Types ---
+export type RawEntry = {
 	status: number;
 	data: {
 		hash: string;
-		date: string;
+		date: string;  // dateTime as ISO string
 		vbuckIcon: string;
-		entries: ShopEntry[];
+
+		entries: {
+			regularPrice: number;
+			finalPrice: number;
+			devName: string;
+			offerId: string;
+			inDate: string;   // dateTime
+			outDate: string;  // dateTime
+
+			bundle?: {
+				name: string;
+				info: string;
+				image: string;
+			};
+
+			banner?: {
+				value: string;
+				intensity: string;
+				backendValue: string;
+			};
+
+			offerTag?: {
+				id: string;
+				text: string;
+			};
+
+			giftable: boolean;
+			refundable: boolean;
+			sortPriority: number;
+
+			layoutId: string;
+
+			layout: {
+				id: string;
+				name: string;
+				category?: string;
+				index: number;
+				rank: number;
+				showIneligibleOffers: string;
+				background?: string;
+				useWidePreview: boolean;
+				displayType: string;
+
+				textureMetadata?: { key: string; value: string }[];
+				stringMetadata?: { key: string; value: string }[];
+				textMetadata?: { key: string; value: string }[];
+			};
+
+			colors?: {
+				color1: string;
+				color2: string;
+				color3: string;
+				textBackgroundColor: string;
+			};
+
+			tileSize: string;
+			displayAssetPath: string;
+			newDisplayAssetPath: string;
+
+			newDisplayAsset?: {
+				id: string;
+				cosmeticId?: string;
+
+				materialInstances?: {
+					id?: string;
+					primaryMode?: string;
+					productTag?: string;
+					Images?: Record<string, string>;
+					Colors?: Record<string, string>;
+					Scalings?: Record<string, number>;
+					Flags?: Record<string, boolean>;
+				}[];
+
+				renderImages: {
+					productTag: string;
+					fileName: string;
+					image: string;
+				}[];
+			};
+
+			brItems?: {
+				id: string;
+				name: string;
+				description: string;
+				exclusiveDescription?: string;
+				unlockRequirements?: string;
+				customExclusiveCallout?: string;
+
+				type: {
+					value: string;
+					displayValue: string;
+					backendValue: string;
+				};
+
+				rarity: {
+					value: string;
+					displayValue: string;
+					backendValue: string;
+				};
+
+				series: {
+					value: string;
+					image: string;
+					colors: string[];
+					backendValue: string;
+				} | null;
+
+				set: {
+					value: string;
+					text: string;
+					backendValue: string;
+				};
+
+				introduction: {
+					chapter: string;
+					season: string;
+					text: string;
+					backendValue: number;
+				};
+
+				images: {
+					smallIcon: string;
+					icon: string;
+					featured?: string | null;
+					lego?: {
+						small: string;
+						large: string;
+						wide: string;
+					};
+					bean?: {
+						small: string;
+						large: string;
+					};
+					Other?: Record<string, string>;
+				};
+
+				variants?: {
+					channel: string;
+					type: string;
+					options: {
+						tag: string;
+						name: string;
+						unlockRequirements: string;
+						image: string;
+					}[];
+				}[];
+
+				builtInEmoteIds?: string[];
+				searchTags?: string[];
+				gameplayTags?: string[];
+				metaTags?: string[];
+				showcaseVideo?: string;
+				dynamicPakId?: string;
+				itemPreviewHeroPath?: string;
+				displayAssetPath?: string;
+				definitionPath?: string;
+				path?: string;
+				added: string; // dateTime
+				shopHistory?: string[]; // array of dateTime
+
+			}[];
+
+
+			tracks?: {
+				id: string;
+				devName: string;
+				title: string;
+				artist: string;
+				album: string;
+				releaseYear: number;
+				bpm: number;
+				duration: number;
+
+				difficulty: {
+					vocals: number;
+					guitar: number;
+					bass: number;
+					plasticBass: number;
+					drums: number;
+					plasticDrums: number;
+				};
+
+				gameplayTags?: string[];
+				genres: string[];
+				albumArt: string;
+				added: string;
+				shopHistory?: string[];
+			}[];
+
+			instruments?: {
+				id: string;
+				name: string;
+				description: string;
+
+				type: {
+					value: string;
+					displayValue: string;
+					backendValue: string;
+				};
+
+				rarity: {
+					value: string;
+					displayValue: string;
+					backendValue: string;
+				};
+
+				images: {
+					small: string;
+					large: string;
+				};
+
+				series: {
+					value: string;
+					image: string;
+					colors: string[];
+					backendValue: string;
+				};
+
+				gameplayTags: string[];
+				path: string;
+				showcaseVideo: string;
+				added: string;
+				shopHistory: string[];
+			}[];
+
+			cars?: {
+				id: string;
+				vehicleId: string;
+				name: string;
+				description: string;
+
+				type: {
+					value: string;
+					displayValue: string;
+					backendValue: string;
+				};
+
+				rarity: {
+					value: string;
+					displayValue: string;
+					backendValue: string;
+				};
+
+				images: {
+					small: string;
+					large: string;
+				};
+
+				series: {
+					value: string;
+					image: string;
+					colors: string[];
+					backendValue: string;
+				};
+
+				gameplayTags: string[];
+				path: string;
+				showcaseVideo: string;
+				added: string;
+				shopHistory: string[];
+			}[];
+
+			legoKits?: {
+				id: string;
+				name: string;
+
+				type: {
+					value: string;
+					displayValue: string;
+					backendValue: string;
+				};
+
+				series: {
+					value: string;
+					image: string;
+					colors: string[];
+					backendValue: string;
+				};
+
+				gameplayTags: string[];
+				images: {
+					small: string;
+					large: string;
+					wide: string;
+				};
+				path: string;
+				added: string;
+				shopHistory: string[];
+			}[];
+		}[];
+
 	};
-}
+};
+
 
 export interface ShopEntry {
 	regularPrice: number;
 	finalPrice: number;
 	offerId?: string;
-	layout?: { name?: string };
-	bundle?: { name: string; image: string };
-	newDisplayAsset?: {
-		renderImages?: { image: string }[];
-	};
-	brItems?: {
-		id: string;
-		name: string;
-		rarity?: {
-			displayValue: string;
-		};
-		images?: {
-			icon?: string;
-			featured?: string;
-		};
-	}[];
-	itemDisplay?: {
+	itemDisplay: {
 		name: string;
 		image: string;
 		vBucks: number;
 		rarity: string;
 		category: string;
 	};
-
 }
-
-
-
 
 const ProductsPage: React.FC = () => {
 	const [itemsByCategory, setItemsByCategory] = useState<Record<string, ShopEntry[]>>({});
@@ -66,10 +332,11 @@ const ProductsPage: React.FC = () => {
 	const [selectedItem, setSelectedItem] = useState<ShopEntry | null>(null);
 	const [searchTerm, setSearchTerm] = useState('');
 	const [loading, setLoading] = useState(true);
-	const token = Cookies.get("session");
 	const [showGiftModal, setShowGiftModal] = useState(false);
 	const [showSuccessModal, setShowSuccessModal] = useState(false);
 	const [showErrorModal, setShowErrorModal] = useState(false);
+
+	const token = Cookies.get('session');
 
 	useEffect(() => {
 		fetchShop();
@@ -79,18 +346,17 @@ const ProductsPage: React.FC = () => {
 	const fetchShop = async () => {
 		try {
 			const res = await fetch('https://fortnite-api.com/v2/shop?language=es-419');
-			const json: ShopResponse = await res.json();
+			const json : RawEntry = await res.json();
+			const entries = json.data?.entries || [];
+
 			const categoryMap: Record<string, ShopEntry[]> = {};
 
-			json.data.entries.forEach((entry: ShopEntry) => {
+			entries.forEach((entry) => {
 				const category = entry.layout?.name || 'Otros';
 				const item = entry.brItems?.[0];
 				if (!item) return;
 
-				//if bundle, add [Lote] prefix
-				const name = entry.bundle && entry.bundle.name && entry.bundle.image
-					? `[Lote] ${entry.bundle.name}`
-					: item.name || 'Objeto sin nombre';
+				const name = entry.bundle?.name ? `${entry.bundle.name}` : item.name;
 				const image =
 					entry.newDisplayAsset?.renderImages?.[0]?.image ||
 					entry.bundle?.image ||
@@ -109,9 +375,6 @@ const ProductsPage: React.FC = () => {
 						rarity,
 						category,
 					},
-					bundle: entry.bundle,
-					newDisplayAsset: entry.newDisplayAsset,
-					brItems: [item],
 				};
 
 				if (!categoryMap[category]) categoryMap[category] = [];
@@ -126,6 +389,8 @@ const ProductsPage: React.FC = () => {
 		}
 	};
 
+
+
 	const sendGift = async (recipient: Friend, creatorCode: string) => {
 		if (!selectedItem || !selectedAccount) return;
 
@@ -137,13 +402,12 @@ const ProductsPage: React.FC = () => {
 					sender_username: selectedAccount.displayName,
 					receiver_id: recipient.id,
 					receiver_username: recipient.username,
-					gift_id:  selectedItem.offerId || '',
+					gift_id: selectedItem.offerId || '',
 					gift_price: selectedItem.finalPrice,
-					gift_name: selectedItem.itemDisplay?.name || 'Sin nombre',
+					gift_name: selectedItem.itemDisplay.name,
 					message: `¡Disfruta tu regalo de ${selectedAccount.displayName}!`,
-					gift_image: selectedItem.itemDisplay?.image || '',
-					creator_code: creatorCode, // Añadir el código de creador
-
+					gift_image: selectedItem.itemDisplay.image,
+					creator_code: creatorCode,
 				},
 				{ headers: { Authorization: `Bearer ${token}` } }
 			);
@@ -151,20 +415,16 @@ const ProductsPage: React.FC = () => {
 			if (res.status === 200) {
 				setShowGiftModal(false);
 				setShowSuccessModal(true);
-
-				console.log(`Gift sent successfully to ${recipient.username}`);
 			} else {
-				
-				console.error('Error sending gift:', res.data);
+				setShowErrorModal(true);
 			}
 		} catch (err) {
+			setShowGiftModal(false);
 			setShowErrorModal(true);
-				setShowGiftModal(false);
-			console.error('Error sending gift', err);
 		}
-	}
+	};
 
-	const fetchAccounts = async () => {
+		const fetchAccounts = async () => {
 		try {
 			const res = await axios.get(`${API_URL}/fortniteaccountsofuser`, {
 				headers: { Authorization: `Bearer ${token}` },
@@ -177,98 +437,58 @@ const ProductsPage: React.FC = () => {
 					pavos: acc.pavos ?? 0,
 					remainingGifts: acc.remainingGifts ?? 0,
 				}));
-				console.log("Fetched accounts:", parsedAccounts);
 				setAccounts(parsedAccounts);
 			} else {
-				console.log("No Fortnite accounts found");
 				setAccounts([]);
-				return;
 			}
 		} catch (err) {
-			console.error("Error fetching Fortnite accounts", err);
+			console.error('Error fetching Fortnite accounts', err);
 		}
 	};
 
 	const handleItemClick = (item: ShopEntry) => {
 		if (!selectedAccount) return;
-
-
-		setShowGiftModal(true);
 		setSelectedItem(item);
-		// Aquí puedes manejar la lógica de compra del objeto
-		console.log(`Comprando ${item.itemDisplay?.name} para la cuenta ${selectedAccount.displayName}`);
+		setShowGiftModal(true);
 	};
 
 	return (
 		<div className='w-screen min-h-screen bg-gray-900 pt-20 px-6 overflow-y-auto'>
-			{showGiftModal && (
+			{showGiftModal && selectedItem && selectedAccount && (
 				<GiftModal
-					onClose={() => {setShowGiftModal(false);fetchAccounts();}}
+					onClose={() => { setShowGiftModal(false); fetchAccounts(); }}
 					selectedItem={selectedItem}
 					selectedAccount={selectedAccount}
-					onSend={(recipient: Friend, creatorCode: string) => {
-						if (!selectedItem || !selectedAccount) return;
-						sendGift(recipient, creatorCode);
-						console.log(`Enviando ${creatorCode} ${selectedItem?.itemDisplay?.name} a ${recipient}`);
-						
-					}}
+					onSend={sendGift}
 				/>
 			)}
 
 			{showErrorModal && (
-				<motion.div
-					className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50'
-					initial={{ opacity: 0 }}
-					animate={{ opacity: 1 }}
-					exit={{ opacity: 0 }}
-				>
-					<motion.div
-						className='bg-gray-800 rounded-2xl p-6 w-full max-w-md'
-						initial={{ scale: 0.8 }}
-						animate={{ scale: 1 }}
-						exit={{ scale: 0.8 }}
-					>
+				<div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50'>
+					<div className='bg-gray-800 rounded-2xl p-6 w-full max-w-md'>
 						<h2 className='text-xl text-red-500 mb-4'>Error</h2>
-						<p className='mb-2 text-white'>No se pudo enviar el regalo. Por favor, inténtalo de nuevo más tarde.</p>
-						<button onClick={() => setShowErrorModal(false)} className='px-4 py-2 bg-gray-600 rounded text-white'>
-							Cerrar
-						</button>
-					</motion.div>
-				</motion.div>
+						<p className='mb-2 text-white'>No se pudo enviar el regalo.</p>
+						<button onClick={() => setShowErrorModal(false)} className='px-4 py-2 bg-gray-600 rounded text-white'>Cerrar</button>
+					</div>
+				</div>
 			)}
 
 			{showSuccessModal && (
-				<motion.div
-					className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50'
-					initial={{ opacity: 0 }}
-					animate={{ opacity: 1 }}
-					exit={{ opacity: 0 }}
-				>
-					<motion.div
-						className='bg-gray-800 rounded-2xl p-6 w-full max-w-md'
-						initial={{ scale: 0.8 }}
-						animate={{ scale: 1 }}
-						exit={{ scale: 0.8 }}
-					>
+				<div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50'>
+					<div className='bg-gray-800 rounded-2xl p-6 w-full max-w-md'>
 						<h2 className='text-xl text-white mb-4'>Éxito</h2>
-						<p className='mb-2 text-white'>El regalo se ha enviado correctamente.</p>
-						<button onClick={() => setShowSuccessModal(false)} className='px-4 py-2 bg-gray-600 rounded text-white'>
-							Cerrar
-						</button>
-					</motion.div>
-				</motion.div>
+						<p className='mb-2 text-white'>Regalo enviado correctamente.</p>
+						<button onClick={() => setShowSuccessModal(false)} className='px-4 py-2 bg-gray-600 rounded text-white'>Cerrar</button>
+					</div>
+				</div>
 			)}
 
-			<motion.div
-				className='bg-gray-800 bg-opacity-50 backdrop-blur-md p-6 rounded-xl shadow-lg w-full max-w-7xl border border-gray-700'
-				initial={{ opacity: 0, y: 20 }}
-				animate={{ opacity: 1, y: 0 }}
-				transition={{ duration: 0.8 }}
-			>
+			<motion.div className='bg-gray-800 bg-opacity-50 backdrop-blur-md p-6 rounded-xl shadow-lg w-full max-w-7xl border border-gray-700'>
 				<h1 className='text-2xl font-bold text-white mb-4 text-center'>Selecciona una cuenta</h1>
 				<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6'>
-					{(accounts.length != 0) ? accounts.map((account) => (
+					{accounts.length > 0 ? accounts.map((account) => (
 						<AccountCard
+							key={account.id}
 							account={account}
 							onClick={() => setSelectedAccount(account)}
 							selected={selectedAccount?.id === account.id}
@@ -289,7 +509,7 @@ const ProductsPage: React.FC = () => {
 				) : (
 					Object.entries(itemsByCategory).map(([category, items]) => {
 						const filtered = items.filter((item) =>
-							item.itemDisplay?.name.toLowerCase().includes(searchTerm)
+							item.itemDisplay.name.toLowerCase().includes(searchTerm)
 						);
 						if (!filtered.length) return null;
 

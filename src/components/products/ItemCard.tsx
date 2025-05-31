@@ -1,45 +1,32 @@
-// components/ItemCard.tsx
 import React from "react";
 import { ShopEntry } from "../../pages/ProductsPage";
 
-interface Item {
-	name: string;
-	image: string;
-	vBucks: number;
-	rarity: string;
-    category: string;
-}
-
-
-
 interface Props {
-	item: ShopEntry;
-	onClick?: (item: ShopEntry) => void;
-	selected?: boolean;
+  item: ShopEntry;
+  selected?: boolean;
+  onClick?: (item: ShopEntry) => void;
 }
 
-const ItemCard: React.FC<Props> = ({ item, onClick, selected }) => {
+const ItemCard: React.FC<Props> = ({ item, selected, onClick }) => {
+  const display = item.itemDisplay;
 
-    const handleClick = () => {
-        if (onClick) {
-            onClick(item);
-        }
-    };
-
-	const itemIsBundle = item.bundle && item.bundle.name && item.bundle.image;
-	return (
-		<div
-			onClick={handleClick}
-			className={`p-3 border rounded-lg cursor-pointer transition-all ${
-				selected ? "border-blue-400" : "border-gray-700"
-			} bg-gray-900 hover:border-blue-500`}
-		>
-			<img src={item?.itemDisplay?.image} alt={item.itemDisplay?.name} className='w-full h-36 object-contain rounded mb-2' />
-			<p className='font-semibold text-white'>{item.itemDisplay?.name}</p>
-			<p className='text-sm text-gray-400'>{item.itemDisplay?.rarity}</p>
-			<p className='text-blue-400 mt-1'>{item.itemDisplay?.vBucks} V-Bucks</p>
-		</div>
-	);
+  return (
+    <div
+      onClick={() => onClick?.(item)}
+      className={`p-3 rounded-2xl transition-all cursor-pointer border 
+        ${selected ? "border-blue-500" : "border-gray-700"} 
+        bg-gray-800 hover:border-blue-400`}
+    >
+      <img
+        src={display?.image}
+        alt={display?.name}
+        className="w-full h-36 object-contain rounded mb-2"
+      />
+      <div className="text-white font-semibold">{display?.name}</div>
+      <div className="text-sm text-gray-400">{display?.rarity}</div>
+      <div className="text-blue-400 mt-1">{display?.vBucks} V-Bucks</div>
+    </div>
+  );
 };
 
 export default ItemCard;
