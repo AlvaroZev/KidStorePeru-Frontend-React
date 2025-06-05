@@ -353,6 +353,7 @@ const ProductsPage: React.FC = () => {
 			const categoryMap: Record<string, ShopEntry[]> = {};
 
 			entries.forEach((entry) => {
+				if (entry.giftable === false) return; // Skip non-giftable items
 				const layout = entry.layout || {
 					name: 'Otros',
 				};
