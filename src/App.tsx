@@ -17,7 +17,8 @@ import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 
-export const API_URL =  "https://kidstoreperu-backend-dev.up.railway.app";
+//export const API_URL = "https://kidstoreperu-backend-dev.up.railway.app";
+export const API_URL =  "http://localhost:8080";
 
 interface SessionPayload {
   admin?: boolean;
@@ -30,41 +31,41 @@ const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-    const checkSession = async () => {
-      const session = Cookies.get("session");
+  const checkSession = async () => {
+    const session = Cookies.get("session");
 
-      if (!session) {
-        setIsAuthenticated(false);
-        setIsAdmin(false);
-        setIsLoading(false);
-        return;
-      }
+    if (!session) {
+      setIsAuthenticated(false);
+      setIsAdmin(false);
+      setIsLoading(false);
+      return;
+    }
 
-      try {
-        const response = await axios.get(`${API_URL}/protected`, {
-          headers: {
-            Authorization: `Bearer ${session}`,
-          },
-        });
+    try {
+      const response = await axios.get(`${API_URL}/protected`, {
+        headers: {
+          Authorization: `Bearer ${session}`,
+        },
+      });
 
-        if (response.status === 200) {
-          const decoded = jwtDecode<SessionPayload>(session);
-          setIsAuthenticated(true);
-          setIsAdmin(decoded.admin === true);
-        } else {
-          Cookies.remove("session");
-          setIsAuthenticated(false);
-          setIsAdmin(false);
-        }
-      } catch (err) {
-        console.error("Session validation failed:", err);
+      if (response.status === 200) {
+        const decoded = jwtDecode<SessionPayload>(session);
+        setIsAuthenticated(true);
+        setIsAdmin(decoded.admin === true);
+      } else {
         Cookies.remove("session");
         setIsAuthenticated(false);
         setIsAdmin(false);
-      } finally {
-        setIsLoading(false);
       }
-    };
+    } catch (err) {
+      console.error("Session validation failed:", err);
+      Cookies.remove("session");
+      setIsAuthenticated(false);
+      setIsAdmin(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
 
@@ -92,7 +93,7 @@ const App = () => {
         <Route
           path="/"
           element={
-              <LoginPage />
+            <LoginPage />
           }
         />
         <Route
@@ -121,6 +122,14 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/transactionsadminhistory"
+              element={
+                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                  <OrdersPage />
+                </ProtectedRoute>
+              }
+            />
           </>
         )}
         <Route
@@ -131,8 +140,9 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+
         <Route
-          path="/history"
+          path="/transactionshistory"
           element={
             <ProtectedRoute isAuthenticated={isAuthenticated}>
               <OrdersPage />

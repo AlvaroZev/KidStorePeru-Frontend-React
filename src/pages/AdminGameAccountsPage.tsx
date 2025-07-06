@@ -5,7 +5,7 @@ import Header from "../components/common/Header";
 import { API_URL } from "../App";
 import AccountsTable from "../components/accounts/AccontsTable";
 import AddAccountModal from "../components/accounts/AddAccountModal";
-import { Account } from "../components/accounts";
+import { Account, rawAccountResponse } from "../components/accounts";
 
 const FortniteAdminAccountsPage = () => {
 	const [accounts, setAccounts] = useState<Account[]>([]);
@@ -19,8 +19,10 @@ const FortniteAdminAccountsPage = () => {
 				headers: { Authorization: `Bearer ${token}` },
 			});
 
-			if (res.data && res.data.length !== 0) {
-				const parsedAccounts: Account[] = res.data.map((acc: any) => ({
+			const data : rawAccountResponse = res.data
+
+			if (data.success && data.gameAccounts.length !== 0) {
+				const parsedAccounts: Account[] = res.data.gameAccounts.map((acc: any) => ({
 					id: acc.ID,
 					displayName: acc.DisplayName,
 					pavos: acc.PaVos ?? 0,
@@ -35,18 +37,6 @@ const FortniteAdminAccountsPage = () => {
 			}
 		} catch (err) {
 			console.error("Error fetching Fortnite accounts", err);
-		}
-	};
-
-	const addAccount = async (data: Partial<Account>) => {
-		try {
-			const res = await axios.post(`${API_URL}/connectfaccount`, data, {
-				headers: { Authorization: `Bearer ${token}` },
-			});
-			if (res.status === 200) fetchAccounts();
-			else throw new Error("Failed to add Fortnite account");
-		} catch (err) {
-			console.error("Error adding Fortnite account", err);
 		}
 	};
 

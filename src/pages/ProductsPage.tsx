@@ -443,7 +443,7 @@ const ProductsPage: React.FC = () => {
 				{ headers: { Authorization: `Bearer ${token}` } }
 			);
 
-			if (res.status === 200) {
+			if (res.status === 200 && res.data.success) {
 				setShowGiftModal(false);
 				setShowSuccessModal(true);
 			} else {

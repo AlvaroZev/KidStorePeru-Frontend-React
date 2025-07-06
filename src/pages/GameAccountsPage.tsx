@@ -19,8 +19,8 @@ const FortniteAccountsPage = () => {
 				headers: { Authorization: `Bearer ${token}` },
 			});
 
-			if (res.data && res.data.length !== 0) {
-				const parsedAccounts: Account[] = res.data.map((acc: any) => ({
+			if (res.data && res.data.success && res.data.gameAccounts && res.data.gameAccounts.length !== 0) {
+				const parsedAccounts: Account[] = res.data.gameAccounts.map((acc: any) => ({
 					id: acc.id,
 					displayName: acc.displayName,
 					pavos: acc.pavos ?? 0,

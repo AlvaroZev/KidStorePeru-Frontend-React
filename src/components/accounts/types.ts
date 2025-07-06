@@ -4,3 +4,15 @@ export type Account = {
     pavos: number;
     remainingGifts: number;
     };
+
+export type rawAccount = {
+    ID: string;
+    DisplayName: string;
+    PaVos: number;
+    RemainingGifts: number;
+    };
+
+export type rawAccountResponse = {
+    success: boolean;
+    gameAccounts: rawAccount[];
+};

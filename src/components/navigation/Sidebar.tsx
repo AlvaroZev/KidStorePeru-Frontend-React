@@ -6,6 +6,7 @@ import {
   ShoppingBag,
   ShoppingCart,
   TrendingUp,
+  LogOut,
   Users,
 } from "lucide-react";
 import { useState } from "react";
@@ -18,18 +19,19 @@ const Sidebar = ({ admin }: { admin: boolean }) => {
 
   const SIDEBAR_ITEMS_Admin = [
     { name: "Regalos", icon: ShoppingBag, color: "#8B5CF6", href: "/gifts" },
-    { name: "Usuarios (Admin)", icon: Users, color: "#EC4899", href: "/usersadminaccounts" },
+    { name: "Usuarios (Admin)", icon: Users, color: "#EC8417", href: "/usersadminaccounts" },
     { name: "Cuentas Fortnite (Admin)", icon: Users, color: "#EC4899", href: "/fortniteadminaccounts" },
     { name: "Cuentas Fortnite", icon: Users, color: "#EC4899", href: "/fortniteaccounts" },
-    { name: "Historial", icon: DollarSign, color: "#10B981", href: "/history" },
-    { name: "Cerrar Sesión", icon: Settings, color: "#F87171", href: "/logout" },
+    { name: "Historial (Admin)", icon: DollarSign, color: "#10B981", href: "/transactionsadminhistory" },
+    { name: "Historial", icon: DollarSign, color: "#10B981", href: "/transactionshistory" },
+    { name: "Cerrar Sesión", icon: LogOut, color: "#F87171", href: "/logout" },
   ];
 
   const SIDEBAR_ITEMS_User = [
     { name: "Regalos", icon: ShoppingBag, color: "#8B5CF6", href: "/gifts" },
     { name: "Cuentas Fortnite", icon: Users, color: "#EC4899", href: "/fortniteaccounts" },
-    { name: "Historial", icon: DollarSign, color: "#10B981", href: "/history" },
-    { name: "Cerrar Sesión", icon: Settings, color: "#F87171", href: "/logout" },
+    { name: "Historial", icon: DollarSign, color: "#10B981", href: "/transactionshistory" },
+    { name: "Cerrar Sesión", icon: LogOut, color: "#F87171", href: "/logout" },
   ];
 
   const SIDEBAR_ITEMS = admin ? SIDEBAR_ITEMS_Admin : SIDEBAR_ITEMS_User;
