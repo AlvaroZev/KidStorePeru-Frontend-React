@@ -1,24 +1,20 @@
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Sidebar from "./components/navigation/Sidebar";
-import OverviewPage from "./pages/OverviewPage";
 import ProductsPage from "./pages/ProductsPage";
 import UsersPage from "./pages/UsersPage";
-import SalesPage from "./pages/SalesPage";
 import OrdersPage from "./pages/OrdersPage";
-import AnalyticsPage from "./pages/AnalyticsPage";
-import SettingsPage from "./pages/SettingsPage";
 import LoginPage from "./pages/LoginPage";
 import LogoutPage from "./pages/LogoutPage";
 import FortniteAccountsPage from "./pages/GameAccountsPage";
 import FortniteAdminAccountsPage from "./pages/AdminGameAccountsPage";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ProtectedRoute from "./components/navigation/ProtectedRoute";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 
-//export const API_URL = "https://kidstoreperu-backend-dev.up.railway.app";
-export const API_URL =  "http://localhost:8080";
+export const API_URL = "https://kidstoreperu-backend-dev.up.railway.app";
+//export const API_URL =  "http://localhost:8080";
 
 interface SessionPayload {
   admin?: boolean;
