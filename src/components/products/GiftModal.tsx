@@ -104,7 +104,7 @@ const GiftModal: React.FC<GiftModalProps> = ({ onClose, selectedItem, selectedAc
         <h2 className="text-xl text-white mb-4">Enviar regalo</h2>
 
         <p className="mb-2 text-white">
-          Has seleccionado: <strong>{selectedItem.brItems?.[0].name}</strong> – {selectedItem.finalPrice} V-Bucks
+          Has seleccionado: <strong>{selectedItem.itemDisplay.name}</strong> – {selectedItem.finalPrice} V-Bucks
         </p>
 
         <div className="mt-3">

@@ -6,10 +6,10 @@ export type Account = {
     };
 
 export type rawAccount = {
-    ID: string;
-    DisplayName: string;
-    PaVos: number;
-    RemainingGifts: number;
+    id: string;
+    displayName: string;
+    pavos: number;
+    remainingGifts: number;
     };
 
 export type rawAccountResponse = {

@@ -5,7 +5,7 @@ import Header from "../components/common/Header";
 import { API_URL } from "../App";
 import AccountsTable from "../components/accounts/AccontsTable";
 import AddAccountModal from "../components/accounts/AddAccountModal";
-import { Account, rawAccountResponse } from "../components/accounts";
+import { Account, rawAccount, rawAccountResponse } from "../components/accounts";
 
 const FortniteAdminAccountsPage = () => {
 	const [accounts, setAccounts] = useState<Account[]>([]);
@@ -22,11 +22,11 @@ const FortniteAdminAccountsPage = () => {
 			const data : rawAccountResponse = res.data
 
 			if (data.success && data.gameAccounts.length !== 0) {
-				const parsedAccounts: Account[] = res.data.gameAccounts.map((acc: any) => ({
-					id: acc.ID,
-					displayName: acc.DisplayName,
-					pavos: acc.PaVos ?? 0,
-					remainingGifts: acc.RemainingGifts ?? 0,
+				const parsedAccounts: Account[] = res.data.gameAccounts.map((acc: rawAccount) => ({
+					id: acc.id,
+					displayName: acc.displayName,
+					pavos: acc.pavos ?? 0,
+					remainingGifts: acc.remainingGifts ?? 0,
 				}));
 				console.log("Fetched accounts:", parsedAccounts);
 				setAccounts(parsedAccounts);

@@ -21,7 +21,7 @@ const AccountCard: React.FC<AccountCardProps> = ({ account, selected, onClick })
                 </div>
                 <p className='text-white font-semibold'>{account.displayName}</p>
                 <p className='text-sm text-gray-400'>Regalos restantes: {account.remainingGifts}</p>
-                <p className='text-sm text-gray-400'>PaVos: {account.remainingGifts}</p>
+                <p className='text-sm text-gray-400'>PaVos: {account.pavos}</p>
             </div>
         </div>
     );

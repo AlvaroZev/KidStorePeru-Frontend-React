@@ -19,7 +19,7 @@ const UpdateUserModal: React.FC<Props> = ({ user, onClose, onUpdate }) => {
     }, [user]);
 
     const handleSubmit = () => {
-        onUpdate({ id: user.id, username, email });
+        onUpdate({ id: user.id, username, email, password });
         onClose();
     };
 
