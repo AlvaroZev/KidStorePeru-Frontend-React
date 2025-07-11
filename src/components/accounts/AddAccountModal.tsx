@@ -28,9 +28,13 @@ const AddAccountModal: React.FC<Props> = ({ onClose, onSuccess }) => {
 
       if (res.status === 200 && res.data.success && res.data.verification_uri_complete && res.data.device_code) {
         setUserCode(res.data.user_code);
-        window.open(res.data.verification_uri_complete, "_blank");
         setDeviceCode(res.data.device_code);
         setStep(2);
+
+        // Wait 1 second before opening the URL
+        setTimeout(() => {
+          window.open(res.data.verification_uri_complete, "_blank");
+        }, 1000);
       } else {
         setStatusColor("error");
       }
@@ -70,27 +74,26 @@ const AddAccountModal: React.FC<Props> = ({ onClose, onSuccess }) => {
 
   return (
     <motion.div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <motion.div className="bg-gray-800 rounded-2xl p-6 w-full max-w-md">
-        <h2 className="text-xl text-white mb-4 text-center">Vincular Cuenta de Fortnite</h2>
-        <p className="text-sm text-red-400 mb-4 text-center font-semibold">
-          ⚠️ IMPORTANTE: Abre los siguientes enlaces en una ventana de incógnito.
-          Esto es obligatorio para evitar conflictos con cuentas agregadas previamente.
-        </p>
+      <motion.div className="bg-gray-800 rounded-2xl p-8 w-full max-w-lg text-center">
+        <h2 className="text-2xl text-white mb-6 font-bold">Vincular Cuenta de Fortnite</h2>
 
         {step === 1 && (
           <>
-            <p className="text-sm text-gray-300 mb-4">
-              Haz clic en el botón de abajo para iniciar el proceso de vinculación.
+            <p className="text-base text-gray-300 mb-6">
+              Haz clic en el botón para iniciar el proceso de vinculación.
             </p>
-            <div className="flex justify-end gap-2">
-              <button onClick={onClose} className="px-4 py-2 bg-gray-600 rounded text-white">
-                Cancelar
-              </button>
+            <div className="flex flex-col items-center gap-4">
               <button
                 onClick={handleInit}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white"
+                className="text-xl px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-semibold"
               >
                 Iniciar Vinculación
+              </button>
+              <button
+                onClick={onClose}
+                className="text-sm text-gray-400 hover:text-gray-300 underline mt-2"
+              >
+                Cancelar
               </button>
             </div>
           </>
@@ -98,18 +101,13 @@ const AddAccountModal: React.FC<Props> = ({ onClose, onSuccess }) => {
 
         {step === 2 && (
           <>
-            <ol className="text-sm text-gray-300 mb-4 list-decimal list-inside space-y-2">
-              <li>Inicia sesión con tu cuenta de Fortnite en la ventana que se abrió.</li>
-              <li>Una vez completado el inicio de sesión, presiona el botón abajo.</li>
-              <li>{userCode}</li>
-            </ol>
-            <div className="flex justify-end gap-2">
-              <button onClick={onClose} className="px-4 py-2 bg-gray-600 rounded text-white">
-                Cancelar
-              </button>
+            <div className="bg-gray-900 text-white text-4xl font-bold py-8 px-6 rounded-2xl mb-6">
+              {userCode}
+            </div>
+            <div className="flex flex-col items-center gap-4">
               <button
                 onClick={handleDeviceSync}
-                className={`px-4 py-2 rounded text-white ${
+                className={`text-xl px-8 py-4 rounded-2xl font-semibold text-white ${
                   statusColor === "success"
                     ? "bg-green-600 hover:bg-green-700"
                     : statusColor === "error"
@@ -118,6 +116,12 @@ const AddAccountModal: React.FC<Props> = ({ onClose, onSuccess }) => {
                 }`}
               >
                 Ya he iniciado sesión
+              </button>
+              <button
+                onClick={onClose}
+                className="text-sm text-gray-400 hover:text-gray-300 underline mt-2"
+              >
+                Cancelar
               </button>
             </div>
           </>

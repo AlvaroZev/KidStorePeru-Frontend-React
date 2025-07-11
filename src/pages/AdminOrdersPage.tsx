@@ -4,9 +4,9 @@ import axios from "axios";
 import Header from "../components/common/Header";
 import OrdersTable from "../components/orders/OrdersTable";
 import { API_URL } from "../App";
-import { Transaction } from "../components/orders/types";
+import { rawTransactionsResponse, Transaction } from "../components/orders/types";
 
-const OrdersPage: React.FC = () => {
+const AdminOrdersPage: React.FC = () => {
 	const [transactions, setTransactions] = useState<Transaction[]>([]);
 	const token = Cookies.get("session");
 
@@ -16,7 +16,12 @@ const OrdersPage: React.FC = () => {
 				headers: { Authorization: `Bearer ${token}` },
 			});
 
-			const data: Transaction[] = res.data.map((tx: any) => ({
+			if (res.status !== 200) {
+				throw new Error("Failed to fetch transactions");
+			}
+			const data : rawTransactionsResponse = res.data
+
+			const transactionsList = data.success && data.transactions.map((tx: any) => ({
 				id: tx.ID,
 				gameAccountID: tx.GameAccountID,
 				senderName: tx.SenderName || null,
@@ -30,7 +35,7 @@ const OrdersPage: React.FC = () => {
 				createdAt: tx.CreatedAt,
 			}));
 
-			setTransactions(data);
+			setTransactions(transactionsList || []);
 		} catch (err) {
 			console.error("Error fetching transactions", err);
 		}
@@ -50,4 +55,4 @@ const OrdersPage: React.FC = () => {
 	);
 };
 
-export default OrdersPage;
+export default AdminOrdersPage;

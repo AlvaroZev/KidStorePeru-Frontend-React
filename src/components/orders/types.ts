@@ -11,3 +11,8 @@ export interface Transaction {
   giftImage: string;
   createdAt: string;
 }
+
+export interface rawTransactionsResponse {
+  success: boolean;
+  transactions: Transaction[];
+};
