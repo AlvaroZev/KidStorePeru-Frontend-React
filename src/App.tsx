@@ -14,7 +14,7 @@ import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import AdminOrdersPage from "./pages/AdminOrdersPage";
 
-export const API_URL = "https://kidstoreperu-backend-dev2.up.railway.app";
+export const API_URL = "https://kidstoreperu-backend-dev.up.railway.app";
 //export const API_URL =  "http://localhost:8080";
 
 interface SessionPayload {
