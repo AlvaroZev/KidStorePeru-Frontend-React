@@ -7,7 +7,11 @@ import { API_URL } from "../App";
 import ItemCard from "../components/products/ItemCard";
 import AccountCard from "../components/products/AccountCard";
 import GiftModal from "../components/products/GiftModal";
-import { Account, rawAccount, rawAccountResponse } from "../components/accounts";
+import {
+  Account,
+  rawAccount,
+  rawAccountResponse,
+} from "../components/accounts";
 import { Friend } from "../components/products/GiftModal";
 
 // --- Types ---
@@ -339,6 +343,18 @@ const ProductsPage: React.FC = () => {
   const [showGiftModal, setShowGiftModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
+  const [lastGiftResponse, setLastGiftResponse] = useState<{
+    success: boolean;
+    message?: string;
+    error?: string;
+    giftInfo?: {
+      giftName: string;
+      giftPrice: number;
+      receiverName: string;
+      senderName: string;
+      giftImage: string;
+    };
+  } | null>(null);
 
   const token = Cookies.get("session");
 
@@ -402,31 +418,35 @@ const ProductsPage: React.FC = () => {
           entry.layout?.name ||
           "Desconocido";
 
-// Add color properties if available and prefix with '#'
-const color = entry.colors?.color1 ? `#${entry.colors.color1}` : "";
-const color2 = entry.colors?.color2 ? `#${entry.colors.color2}` : "";
-const color3 = entry.colors?.color3 ? `#${entry.colors.color3}` : "";
-const backgroundColor = entry.colors?.textBackgroundColor ? `#${entry.colors.textBackgroundColor}` : "";
-const backgroundColor2 = entry.colors?.color2 ? `#${entry.colors.color2}` : "";
+        // Add color properties if available and prefix with '#'
+        const color = entry.colors?.color1 ? `#${entry.colors.color1}` : "";
+        const color2 = entry.colors?.color2 ? `#${entry.colors.color2}` : "";
+        const color3 = entry.colors?.color3 ? `#${entry.colors.color3}` : "";
+        const backgroundColor = entry.colors?.textBackgroundColor
+          ? `#${entry.colors.textBackgroundColor}`
+          : "";
+        const backgroundColor2 = entry.colors?.color2
+          ? `#${entry.colors.color2}`
+          : "";
 
-const displayItem: ShopEntry = {
-  regularPrice: entry.regularPrice ?? 0,
-  finalPrice: entry.finalPrice ?? 0,
-  offerId: entry.offerId ?? "unknown-offer",
-  itemDisplay: {
-    name,
-    type,
-    image,
-    vBucks: entry.finalPrice ?? 0,
-    rarity,
-    category,
-    color,
-    color2,
-    color3,
-    backgroundColor,
-    backgroundColor2,
-  },
-};
+        const displayItem: ShopEntry = {
+          regularPrice: entry.regularPrice ?? 0,
+          finalPrice: entry.finalPrice ?? 0,
+          offerId: entry.offerId ?? "unknown-offer",
+          itemDisplay: {
+            name,
+            type,
+            image,
+            vBucks: entry.finalPrice ?? 0,
+            rarity,
+            category,
+            color,
+            color2,
+            color3,
+            backgroundColor,
+            backgroundColor2,
+          },
+        };
 
         if (!categoryMap[category]) categoryMap[category] = [];
         categoryMap[category].push(displayItem);
@@ -461,16 +481,25 @@ const displayItem: ShopEntry = {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      const data : {
-        success: boolean,
-        message?: string,
-        error?: string
+      const data: {
+        success: boolean;
+        message?: string;
+        error?: string;
+        giftInfo?: {
+          giftName: string;
+          giftPrice: number;
+          receiverName: string;
+          senderName: string;
+          giftImage: string;
+        };
       } = res.data;
-      
-      if (res.status === 200 && data.success) {
+
+      if (data.success == true ) {
+        setLastGiftResponse(data);
         setShowGiftModal(false);
         setShowSuccessModal(true);
       } else {
+        setLastGiftResponse(data);
         setShowErrorModal(true);
       }
     } catch (err) {
@@ -543,14 +572,43 @@ const displayItem: ShopEntry = {
         </div>
       )}
 
-      {showSuccessModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-gray-800 rounded-2xl p-6 w-full max-w-md">
-            <h2 className="text-xl text-white mb-4">Éxito</h2>
-            <p className="mb-2 text-white">Regalo enviado correctamente.</p>
+      {showSuccessModal && lastGiftResponse?.giftInfo && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
+          <div className="bg-gray-900 text-white rounded-3xl shadow-lg p-6 w-full max-w-md text-center space-y-4">
+            <h2 className="text-2xl font-bold text-green-400">
+              🎉 Regalo Enviado Exitosamente
+            </h2>
+
+            <img
+              src={lastGiftResponse.giftInfo.giftImage}
+              alt={lastGiftResponse.giftInfo.giftName}
+              className="w-32 h-32 mx-auto object-contain rounded-xl border border-white"
+            />
+
+            <div className="space-y-1 text-sm">
+              <p>
+                <span className="font-semibold text-gray-300">
+                  Nombre del regalo:
+                </span>{" "}
+                {lastGiftResponse.giftInfo.giftName}
+              </p>
+              <p>
+                <span className="font-semibold text-gray-300">Precio:</span>{" "}
+                {lastGiftResponse.giftInfo.giftPrice} V-Bucks
+              </p>
+              <p>
+                <span className="font-semibold text-gray-300">Para:</span>{" "}
+                {lastGiftResponse.giftInfo.receiverName}
+              </p>
+              <p>
+                <span className="font-semibold text-gray-300">De:</span>{" "}
+                {lastGiftResponse.giftInfo.senderName}
+              </p>
+            </div>
+
             <button
               onClick={() => setShowSuccessModal(false)}
-              className="px-4 py-2 bg-gray-600 rounded text-white"
+              className="mt-4 px-6 py-2 rounded-full bg-green-600 hover:bg-green-700 transition text-white font-semibold"
             >
               Cerrar
             </button>
