@@ -319,6 +319,11 @@ export interface ShopEntry {
     vBucks: number;
     rarity: string;
     category: string;
+    color?: string;
+    color2?: string;
+    color3?: string;
+    backgroundColor?: string;
+    backgroundColor2?: string;
   };
 }
 
@@ -397,19 +402,31 @@ const ProductsPage: React.FC = () => {
           entry.layout?.name ||
           "Desconocido";
 
-        const displayItem: ShopEntry = {
-          regularPrice: entry.regularPrice ?? 0,
-          finalPrice: entry.finalPrice ?? 0,
-          offerId: entry.offerId ?? "unknown-offer",
-          itemDisplay: {
-            name,
-            type,
-            image,
-            vBucks: entry.finalPrice ?? 0,
-            rarity,
-            category,
-          },
-        };
+// Add color properties if available and prefix with '#'
+const color = entry.colors?.color1 ? `#${entry.colors.color1}` : "";
+const color2 = entry.colors?.color2 ? `#${entry.colors.color2}` : "";
+const color3 = entry.colors?.color3 ? `#${entry.colors.color3}` : "";
+const backgroundColor = entry.colors?.textBackgroundColor ? `#${entry.colors.textBackgroundColor}` : "";
+const backgroundColor2 = entry.colors?.color2 ? `#${entry.colors.color2}` : "";
+
+const displayItem: ShopEntry = {
+  regularPrice: entry.regularPrice ?? 0,
+  finalPrice: entry.finalPrice ?? 0,
+  offerId: entry.offerId ?? "unknown-offer",
+  itemDisplay: {
+    name,
+    type,
+    image,
+    vBucks: entry.finalPrice ?? 0,
+    rarity,
+    category,
+    color,
+    color2,
+    color3,
+    backgroundColor,
+    backgroundColor2,
+  },
+};
 
         if (!categoryMap[category]) categoryMap[category] = [];
         categoryMap[category].push(displayItem);
