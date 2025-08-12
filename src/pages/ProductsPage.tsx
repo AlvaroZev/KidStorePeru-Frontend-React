@@ -543,8 +543,10 @@ const ProductsPage: React.FC = () => {
     setShowGiftModal(true);
   };
 
-  return (
-    <div className="w-screen min-h-screen bg-gray-900 pt-20 px-6 overflow-y-auto">
+return (
+  <div className="flex">
+    {/* Main content area */}
+    <div className="flex-1 min-h-screen bg-gray-900 pt-20 px-6 overflow-y-auto ml-64">
       {showGiftModal && selectedItem && selectedAccount && (
         <GiftModal
           onClose={() => {
@@ -578,13 +580,11 @@ const ProductsPage: React.FC = () => {
             <h2 className="text-2xl font-bold text-green-400">
               🎉 Regalo Enviado Exitosamente
             </h2>
-
             <img
               src={lastGiftResponse.giftInfo.giftImage}
               alt={lastGiftResponse.giftInfo.giftName}
               className="w-32 h-32 mx-auto object-contain rounded-xl border border-white"
             />
-
             <div className="space-y-1 text-sm">
               <p>
                 <span className="font-semibold text-gray-300">
@@ -605,7 +605,6 @@ const ProductsPage: React.FC = () => {
                 {lastGiftResponse.giftInfo.senderName}
               </p>
             </div>
-
             <button
               onClick={() => setShowSuccessModal(false)}
               className="mt-4 px-6 py-2 rounded-full bg-green-600 hover:bg-green-700 transition text-white font-semibold"
@@ -618,7 +617,7 @@ const ProductsPage: React.FC = () => {
 
       <motion.div className="bg-gray-800 bg-opacity-50 backdrop-blur-md p-6 rounded-xl shadow-lg w-full max-w-7xl border border-gray-700">
         <h1 className="text-2xl font-bold text-white mb-4 text-center">
-          Selecciona una cuenta
+          🛍️ Selecciona una cuenta
         </h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
           {accounts.length > 0 ? (
@@ -638,7 +637,7 @@ const ProductsPage: React.FC = () => {
         </div>
 
         <h2 className="text-2xl font-bold text-white mb-6 text-center">
-          Tienda de Fortnite
+          🎁 Tienda de Fortnite
         </h2>
         <input
           type="text"
@@ -672,7 +671,9 @@ const ProductsPage: React.FC = () => {
         )}
       </motion.div>
     </div>
-  );
+  </div>
+);
+
 };
 
 export default ProductsPage;
