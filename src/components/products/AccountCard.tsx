@@ -1,5 +1,9 @@
+import React, { useState } from "react";
 import { FiRefreshCw } from "react-icons/fi";
 import { Account } from "../accounts";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { API_URL } from "../../App";
 
 interface AccountCardProps {
   account: Account;
@@ -14,6 +18,57 @@ const AccountCard: React.FC<AccountCardProps> = ({
   onClick,
   onRefresh,
 }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const token = Cookies.get("session");
+
+  // Function to refresh pavos for a specific account
+  const refreshPavos = async (accountId: string) => {
+    try {
+      const response = await axios.post(
+        `${API_URL}/refreshpavos`,
+        {
+          account_id: accountId
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
+
+      const data = response.data;
+      
+      if (data.success) {
+        console.log('Pavos refreshed successfully:', data.data);
+        // Update your UI with the new pavos value
+        return data.data;
+      } else {
+        console.error('Failed to refresh pavos:', data.error);
+        throw new Error(data.error);
+      }
+    } catch (error) {
+      console.error('Error refreshing pavos:', error);
+      throw error;
+    }
+  };
+
+  const handleRefresh = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsLoading(true);
+    try {
+      const result = await refreshPavos(account.id);
+      // Call the parent's onRefresh callback to update the UI
+      onRefresh?.();
+      console.log('Pavos updated:', result);
+    } catch (error) {
+      console.error('Failed to refresh pavos:', error);
+      // You could add a toast notification here
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div
       onClick={onClick}
@@ -24,14 +79,12 @@ const AccountCard: React.FC<AccountCardProps> = ({
       }`}
     >
       <button
-        onClick={(e) => {
-          e.stopPropagation();
-          onRefresh?.();
-        }}
-        className="absolute top-2 right-2 bg-slate-700 p-2 rounded-full hover:bg-slate-600"
-        title="Actualizar cuenta"
+        onClick={handleRefresh}
+        disabled={isLoading}
+        className="absolute top-1 right-1 bg-slate-700 p-1 rounded-full hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed"
+        title="Actualizar pavos"
       >
-        <FiRefreshCw className="text-white text-lg" />
+        <FiRefreshCw className={`text-white text-sm ${isLoading ? 'animate-spin' : ''}`} />
       </button>
 
       <h3 className="text-xl font-burbankBold mb-2 text-center text-pink-400">

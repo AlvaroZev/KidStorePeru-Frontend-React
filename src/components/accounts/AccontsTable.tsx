@@ -84,7 +84,7 @@ const AccountsTable: React.FC<Props> = ({ accounts, onDelete }) => {
 								</td>
 								<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
 									<button
-										className="text-red-400 hover:text-red-300"
+										className="bg-red-600 hover:bg-red-700 px-3 py-1 text-xs rounded font-semibold"
 										onClick={() => handleDelete(acc.id)}
 									>
 										Eliminar

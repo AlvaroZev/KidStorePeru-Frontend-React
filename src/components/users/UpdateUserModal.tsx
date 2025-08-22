@@ -49,10 +49,10 @@ const UpdateUserModal: React.FC<Props> = ({ user, onClose, onUpdate }) => {
                 />
 
                 <div className="flex justify-end gap-2">
-                    <button onClick={onClose} className="px-4 py-2 bg-gray-600 rounded text-white">
+                    <button onClick={onClose} className="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded font-semibold">
                         Cancelar
                     </button>
-                    <button onClick={handleSubmit} className="px-4 py-2 bg-blue-600 rounded text-white">
+                    <button onClick={handleSubmit} className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded font-semibold">
                         Editar
                     </button>
                 </div>

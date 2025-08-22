@@ -21,7 +21,6 @@ interface GiftModalProps {
 }
 
 const GiftModal: React.FC<GiftModalProps> = ({ onClose, selectedItem, selectedAccount, onSend }) => {
-  const [creatorCode, setCreatorCode] = useState("KIDDX");
   const [searchName, setSearchName] = useState("");
   const [searchResult, setSearchResult] = useState<Friend | null>(null);
   const [searchStatus, setSearchStatus] = useState<"none" | "loading" | "error" | "success">("none");
@@ -31,11 +30,11 @@ const GiftModal: React.FC<GiftModalProps> = ({ onClose, selectedItem, selectedAc
 
   if (!selectedItem || !selectedAccount) {
     return (
-      <motion.div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-        <motion.div className="bg-gray-800 rounded-2xl p-6 w-full max-w-md">
-          <h2 className="text-xl text-white mb-4">Error</h2>
-          <p className="mb-2 text-white">Por favor selecciona un ítem y una cuenta</p>
-          <button onClick={onClose} className="px-4 py-2 bg-gray-600 rounded text-white">Cerrar</button>
+      <motion.div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+        <motion.div className="bg-[#1e293b] p-6 rounded-lg w-full max-w-md text-white relative">
+          <h2 className="text-2xl font-bold mb-3 text-center text-blue-400">Error</h2>
+          <p className="mb-2 text-white text-center">Por favor selecciona un ítem y una cuenta</p>
+          <button onClick={onClose} className="w-full bg-gray-600 hover:bg-gray-700 py-2 rounded font-semibold">Cerrar</button>
         </motion.div>
       </motion.div>
     );
@@ -94,69 +93,74 @@ const GiftModal: React.FC<GiftModalProps> = ({ onClose, selectedItem, selectedAc
 
   const handleSend = () => {
     if (!searchResult) return;
-    onSend(searchResult, creatorCode);
+    onSend(searchResult, "KIDDX"); // Default creator code
     onClose();
   };
 
   return (
-    <motion.div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <motion.div className="bg-gray-800 rounded-2xl p-6 w-full max-w-md">
-        <h2 className="text-xl text-white mb-4">Enviar regalo</h2>
+    <motion.div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+      <motion.div className="bg-[#1e293b] p-6 rounded-lg w-full max-w-md text-white relative">
+        <h2 className="text-2xl font-bold mb-3 text-center text-blue-400">
+          🎁 Enviar Regalo
+        </h2>
+        
+        <img 
+          src={selectedItem.itemDisplay.image} 
+          alt={selectedItem.itemDisplay.name} 
+          className="w-32 mx-auto mb-3 rounded shadow-lg" 
+        />
+        
+        <p className="text-center font-semibold mb-1">{selectedItem.itemDisplay.name}</p>
+        
+        <p className="text-center text-sm mb-2">💸 Precio: {selectedItem.finalPrice} V-BUCKS</p>
+        
+        <p className="text-center text-sm mb-4 text-gray-300">📤 Enviando desde: <span className="text-blue-400 font-semibold">{selectedAccount.displayName}</span></p>
 
-        <p className="mb-2 text-white">
-          Has seleccionado: <strong>{selectedItem.itemDisplay.name}</strong> – {selectedItem.finalPrice} V-Bucks
-        </p>
-
-        <div className="mt-3">
-          <label className="block mb-1 font-semibold text-white">Buscar amigo:</label>
+        <div className="mb-4">
+          <label className="block text-sm mb-1">Buscar amigo:</label>
           <div className="flex gap-2">
             <input
               type="text"
               value={searchName}
               onChange={(e) => setSearchName(e.target.value)}
-              className="flex-grow px-3 py-2 rounded bg-gray-700 border border-gray-600 text-white"
+              className="flex-grow px-3 py-2 rounded bg-slate-700 border border-slate-600 text-sm text-white"
+              placeholder="Nombre del amigo..."
             />
             <button
               onClick={handleSearchFriend}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded"
+              disabled={searchStatus === "loading"}
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded font-semibold text-sm"
             >
-              Buscar
+              {searchStatus === "loading" ? "..." : "Buscar"}
             </button>
           </div>
+          
           {searchStatus === "success" && (
-            <div className="mt-2 text-green-400 text-sm">
-              ✓ Usuario listo para recibir regalos.
+            <div className="mt-2 text-green-400 text-sm text-center">
+              ✓ Usuario listo para recibir regalos: <strong>{searchResult?.username}</strong>
             </div>
           )}
           {searchStatus === "error" && (
-            <div className="mt-2 text-red-400 text-sm">
+            <div className="mt-2 text-red-400 text-sm text-center">
               ✗ {errorMessage}
             </div>
           )}
         </div>
 
-        <div className="mt-4">
-          <label className="block mb-1 font-semibold text-white">Código de creador:</label>
-          <input
-            type="text"
-            value={creatorCode}
-            onChange={(e) => setCreatorCode(e.target.value)}
-            className="w-full px-3 py-2 rounded bg-gray-700 border border-gray-600 text-white"
-          />
-        </div>
+        <button
+          onClick={handleSend}
+          disabled={searchStatus !== "success"}
+          className="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded font-semibold mb-2 disabled:bg-gray-600 disabled:cursor-not-allowed"
+        >
+          Enviar Regalo
+        </button>
 
-        <div className="mt-6 flex justify-end gap-2">
-          <button onClick={onClose} className="px-4 py-2 bg-gray-600 rounded text-white">
-            Cancelar
-          </button>
-          <button
-            onClick={handleSend}
-            className="px-4 py-2 bg-blue-600 rounded text-white"
-            disabled={searchStatus !== "success"}
-          >
-            Enviar
-          </button>
-        </div>
+        <button
+          onClick={onClose}
+          className="w-full text-sm text-gray-400 hover:text-white border border-slate-600 py-2 rounded"
+        >
+          Cancelar
+        </button>
       </motion.div>
     </motion.div>
   );

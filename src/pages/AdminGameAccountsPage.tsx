@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import Cookies from "js-cookie";
 import axios from "axios";
 import Header from "../components/common/Header";
@@ -57,27 +58,38 @@ const FortniteAdminAccountsPage = () => {
 	}, []);
 
 	return (
-		<div className='flex-1 overflow-auto relative z-10'>
-			<Header title='Cuentas de Fortnite' />
+		<div className="flex">
+			{/* Main content area */}
+			<div className="flex-1 min-h-screen bg-gray-900 pt-20 px-6 overflow-y-auto ml-64">
+				{showAddModal && (
+					<AddAccountModal
+						onClose={() => setShowAddModal(false)}
+						onSuccess={() => {fetchAccounts(); setShowAddModal(false);}}
+					/>
+				)}
 
-			{showAddModal && (
-				<AddAccountModal
-					onClose={() => setShowAddModal(false)}
-					onSuccess={() => {fetchAccounts(); setShowAddModal(false);}}
-				/>
-			)}
-
-			<main className='max-w-7xl mx-auto py-6 px-4 lg:px-8'>
-				<div className='flex justify-end mb-4'>
-					<button
-						onClick={() => setShowAddModal(true)}
-						className='bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-500'
-					>
-						Añadir Cuenta
-					</button>
-				</div>
-				<AccountsTable accounts={accounts} onDelete={deleteAccount} />
-			</main>
+				<motion.div className="bg-gray-800 bg-opacity-50 backdrop-blur-md p-6 rounded-xl shadow-lg w-full max-w-7xl border border-gray-700">
+					<h1 className="text-2xl font-bold text-white mb-6 text-center">
+						🎮 Cuentas de Fortnite - Administrador
+					</h1>
+					<div className="text-center text-gray-400 mb-6">
+						{accounts.length === 0 ? (
+							<p>No hay cuentas de Fortnite registradas</p>
+						) : (
+							<p>Total de cuentas: {accounts.length}</p>
+						)}
+					</div>
+					<div className='flex justify-end mb-4'>
+						<button
+							onClick={() => setShowAddModal(true)}
+							className='flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded font-semibold shadow'
+						>
+							➕ Añadir Cuenta
+						</button>
+					</div>
+					<AccountsTable accounts={accounts} onDelete={deleteAccount} />
+				</motion.div>
+			</div>
 		</div>
 	);
 };

@@ -101,16 +101,16 @@ const UsersTable: React.FC<Props> = ({ users, onDelete, onUpdate }) => {
 
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                   <button
-                    className="text-indigo-400 hover:text-indigo-300 mr-2"
+                    className="bg-blue-600 hover:bg-blue-700 px-3 py-1 text-xs rounded font-semibold mr-2"
                     onClick={() => onUpdate(user)}
                   >
-                    Edit
+                    Editar
                   </button>
                   <button
-                    className="text-red-400 hover:text-red-300"
+                    className="bg-red-600 hover:bg-red-700 px-3 py-1 text-xs rounded font-semibold"
                     onClick={() => handleDelete(user.id)}
                   >
-                    Delete
+                    Eliminar
                   </button>
                 </td>
               </motion.tr>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import Cookies from "js-cookie";
 import axios from "axios";
 import Header from "../components/common/Header";
@@ -46,11 +47,23 @@ const AdminOrdersPage: React.FC = () => {
 	}, []);
 
 	return (
-		<div className="flex-1 overflow-auto relative z-10">
-			<Header title="Historial de Órdenes" />
-			<main className="max-w-7xl mx-auto py-6 px-4 lg:px-8">
-				<OrdersTable transactions={transactions} />
-			</main>
+		<div className="flex">
+			{/* Main content area */}
+			<div className="flex-1 min-h-screen bg-gray-900 pt-20 px-6 overflow-y-auto ml-64">
+				<motion.div className="bg-gray-800 bg-opacity-50 backdrop-blur-md p-6 rounded-xl shadow-lg w-full max-w-7xl border border-gray-700">
+					<h1 className="text-2xl font-bold text-white mb-6 text-center">
+						📊 Historial de Órdenes - Administrador
+					</h1>
+					<div className="text-center text-gray-400 mb-6">
+						{transactions.length === 0 ? (
+							<p>No hay transacciones disponibles</p>
+						) : (
+							<p>Total de transacciones: {transactions.length}</p>
+						)}
+					</div>
+					<OrdersTable transactions={transactions} />
+				</motion.div>
+			</div>
 		</div>
 	);
 };

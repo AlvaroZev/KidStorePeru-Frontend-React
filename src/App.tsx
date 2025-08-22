@@ -13,6 +13,7 @@ import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import AdminOrdersPage from "./pages/AdminOrdersPage";
+import React from "react";
 
 export const API_URL = "https://backendregalos.kidstoreperu.com";
 //export const API_URL =  "http://localhost:8080";

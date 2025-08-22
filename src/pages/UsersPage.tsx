@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import Cookies from "js-cookie";
 import axios from "axios";
 import Header from "../components/common/Header";
@@ -95,42 +96,49 @@ const UsersPage = () => {
   }, []);
 
   return (
-    <div className='flex-1 overflow-auto relative z-10'>
-      <Header title='Panel de Administrador de Usuarios' />
+    <div className="flex">
+      {/* Main content area */}
+      <div className="flex-1 min-h-screen bg-gray-900 pt-20 px-6 overflow-y-auto ml-64">
+        {showAddModal && (
+          <AddUserModal
+            onClose={() => setShowAddModal(false)}
+            onSave={addUser}
+          />
+        )}
+        {showUpdateModal && (
+          <UpdateUserModal
+            user={selectedUser!}
+            onClose={() => {setShowUpdateModal(false) ; setSelectedUser(null);}}
+            onUpdate={submitUpdateUser}
+          />
+        )}
 
-	  {showAddModal && (
-        <AddUserModal
-          onClose={() => setShowAddModal(false)}
-          onSave={addUser}
-        />
-      )}
-	  {showUpdateModal && (
-		<UpdateUserModal
-		  user={selectedUser!}
-		  onClose={() => {setShowUpdateModal(false) ; setSelectedUser(null);}}
-		  onUpdate={submitUpdateUser}
-		/>
-	  )}
-
-
-
-      <main className='max-w-7xl mx-auto py-6 px-4 lg:px-8'>
-        <div className='flex justify-end mb-4'>
-          <button
-            onClick={() => setShowAddModal(true)}
-            className='bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-500'
-          >
-            Añadir Usuario
-          </button>
-        </div>
-        <UsersTable
-          users={users}
-          onDelete={deleteUser}
-          onUpdate={updateUser}
-        />
-      </main>
-
-
+        <motion.div className="bg-gray-800 bg-opacity-50 backdrop-blur-md p-6 rounded-xl shadow-lg w-full max-w-7xl border border-gray-700">
+          <h1 className="text-2xl font-bold text-white mb-6 text-center">
+            👥 Panel de Administrador de Usuarios
+          </h1>
+          <div className="text-center text-gray-400 mb-6">
+            {users.length === 0 ? (
+              <p>No hay usuarios registrados</p>
+            ) : (
+              <p>Total de usuarios: {users.length}</p>
+            )}
+          </div>
+          <div className='flex justify-end mb-4'>
+            <button
+              onClick={() => setShowAddModal(true)}
+              className='flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded font-semibold shadow'
+            >
+              ➕ Añadir Usuario
+            </button>
+          </div>
+          <UsersTable
+            users={users}
+            onDelete={deleteUser}
+            onUpdate={updateUser}
+          />
+        </motion.div>
+      </div>
     </div>
   );
 };

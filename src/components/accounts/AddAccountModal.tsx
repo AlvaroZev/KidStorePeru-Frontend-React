@@ -85,7 +85,7 @@ const AddAccountModal: React.FC<Props> = ({ onClose, onSuccess }) => {
             <div className="flex flex-col items-center gap-4">
               <button
                 onClick={handleInit}
-                className="text-xl px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-semibold"
+                className="text-xl px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-semibold shadow"
               >
                 Iniciar Vinculación
               </button>
@@ -107,7 +107,7 @@ const AddAccountModal: React.FC<Props> = ({ onClose, onSuccess }) => {
             <div className="flex flex-col items-center gap-4">
               <button
                 onClick={handleDeviceSync}
-                className={`text-xl px-8 py-4 rounded-2xl font-semibold text-white ${
+                className={`text-xl px-8 py-4 rounded-2xl font-semibold text-white shadow ${
                   statusColor === "success"
                     ? "bg-green-600 hover:bg-green-700"
                     : statusColor === "error"
