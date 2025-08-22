@@ -29,18 +29,18 @@ const UsersTable: React.FC<Props> = ({ users, onDelete, onUpdate }) => {
 
   return (
     <motion.div
-      className="bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 border border-gray-700"
+      className="bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-4 sm:p-6 border border-gray-700"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
     >
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold text-gray-100">Usuarios</h2>
-        <div className="relative">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6 gap-4">
+        <h2 className="text-lg sm:text-xl font-semibold text-gray-100">Usuarios</h2>
+        <div className="relative w-full sm:w-auto">
           <input
             type="text"
             placeholder="Buscar usuarios..."
-            className="bg-gray-700 text-white placeholder-gray-400 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="bg-gray-700 text-white placeholder-gray-400 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-64 text-sm sm:text-base"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             autoComplete="off"
@@ -53,16 +53,16 @@ const UsersTable: React.FC<Props> = ({ users, onDelete, onUpdate }) => {
         <table className="min-w-full divide-y divide-gray-700">
           <thead>
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+              <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Nombre
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+              <th className="hidden sm:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Email
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+              <th className="hidden md:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Fecha de Creación
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+              <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                 Acciones
               </th>
             </tr>
@@ -76,30 +76,30 @@ const UsersTable: React.FC<Props> = ({ users, onDelete, onUpdate }) => {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.2 }}
               >
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
-                    <div className="flex-shrink-0 h-10 w-10">
-                      <div className="h-10 w-10 rounded-full bg-gradient-to-r from-purple-400 to-blue-500 flex items-center justify-center text-white font-semibold">
+                    <div className="flex-shrink-0 h-8 w-8 sm:h-10 sm:w-10">
+                      <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-gradient-to-r from-purple-400 to-blue-500 flex items-center justify-center text-white font-semibold text-sm sm:text-base">
                         {user.username.charAt(0).toUpperCase()}
                       </div>
                     </div>
-                    <div className="ml-4">
+                    <div className="ml-2 sm:ml-4">
                       <div className="text-sm font-medium text-gray-100">{user.username}</div>
                     </div>
                   </div>
                 </td>
 
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="hidden sm:table-cell px-3 sm:px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-300">{user.email || "-"}</div>
                 </td>
 
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="hidden md:table-cell px-3 sm:px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-400">
                     {new Date(user.createdAt).toLocaleDateString()}
                   </div>
                 </td>
 
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                   <button
                     className="bg-blue-600 hover:bg-blue-700 px-3 py-1 text-xs rounded font-semibold mr-2"
                     onClick={() => onUpdate(user)}

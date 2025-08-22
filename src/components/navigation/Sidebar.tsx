@@ -4,29 +4,33 @@ import {
   ShoppingBag,
   LogOut,
   Users,
+  Gamepad2,
+  History,
+  UserCheck,
+  Gift,
 } from "lucide-react";
-import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../../../assets/Banner.png";
+import { useSidebar } from "./SidebarContext";
 
 const Sidebar = ({ admin }: { admin: boolean }) => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const { isSidebarOpen, setIsSidebarOpen } = useSidebar();
   const location = useLocation();
 
   const SIDEBAR_ITEMS_Admin = [
-    { name: "Regalos", icon: ShoppingBag, color: "#8B5CF6", href: "/gifts" },
-    { name: "Usuarios (Admin)", icon: Users, color: "#EC8417", href: "/usersadminaccounts" },
-    { name: "Cuentas Fortnite (Admin)", icon: Users, color: "#EC4899", href: "/fortniteadminaccounts" },
-    { name: "Cuentas Fortnite", icon: Users, color: "#EC4899", href: "/fortniteaccounts" },
-    { name: "Historial (Admin)", icon: DollarSign, color: "#10B981", href: "/transactionsadminhistory" },
-    { name: "Historial", icon: DollarSign, color: "#10B981", href: "/transactionshistory" },
+    { name: "Regalos", icon: Gift, color: "#8B5CF6", href: "/gifts" },
+    { name: "Usuarios (Admin)", icon: UserCheck, color: "#EC8417", href: "/usersadminaccounts" },
+    { name: "Cuentas Fortnite (Admin)", icon: Gamepad2, color: "#EC4899", href: "/fortniteadminaccounts" },
+    { name: "Cuentas Fortnite", icon: Gamepad2, color: "#3B82F6", href: "/fortniteaccounts" },
+    { name: "Historial (Admin)", icon: History, color: "#10B981", href: "/transactionsadminhistory" },
+    { name: "Historial", icon: History, color: "#F59E0B", href: "/transactionshistory" },
   ];
 
   const SIDEBAR_ITEMS_User = [
-    { name: "Regalos", icon: ShoppingBag, color: "#8B5CF6", href: "/gifts" },
-    { name: "Cuentas Fortnite", icon: Users, color: "#EC4899", href: "/fortniteaccounts" },
-    { name: "Historial", icon: DollarSign, color: "#10B981", href: "/transactionshistory" },
+    { name: "Regalos", icon: Gift, color: "#8B5CF6", href: "/gifts" },
+    { name: "Cuentas Fortnite", icon: Gamepad2, color: "#3B82F6", href: "/fortniteaccounts" },
+    { name: "Historial", icon: History, color: "#F59E0B", href: "/transactionshistory" },
   ];
 
   const SIDEBAR_ITEMS = admin ? SIDEBAR_ITEMS_Admin : SIDEBAR_ITEMS_User;

@@ -13,6 +13,7 @@ import {
   rawAccountResponse,
 } from "../components/accounts";
 import { Friend } from "../components/products/GiftModal";
+import MainContent from "../components/navigation/MainContent";
 
 // --- Types ---
 export type RawEntry = {
@@ -544,9 +545,7 @@ const ProductsPage: React.FC = () => {
   };
 
 return (
-  <div className="flex">
-    {/* Main content area */}
-    <div className="flex-1 min-h-screen bg-gray-900 pt-20 px-6 overflow-y-auto ml-64">
+  <MainContent>
       {showGiftModal && selectedItem && selectedAccount && (
         <GiftModal
           onClose={() => {
@@ -615,11 +614,11 @@ return (
         </div>
       )}
 
-      <motion.div className="bg-gray-800 bg-opacity-50 backdrop-blur-md p-6 rounded-xl shadow-lg w-full max-w-7xl border border-gray-700">
-        <h1 className="text-2xl font-bold text-white mb-4 text-center">
+      <motion.div className="bg-gray-800 bg-opacity-50 backdrop-blur-md p-4 sm:p-6 rounded-xl shadow-lg w-full max-w-7xl border border-gray-700">
+        <h1 className="text-xl sm:text-2xl font-bold text-white mb-4 text-center">
           🛍️ Selecciona una cuenta
         </h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 mb-4 sm:mb-6">
           {accounts.length > 0 ? (
             accounts.map((account) => (
               <AccountCard
@@ -636,13 +635,13 @@ return (
           )}
         </div>
 
-        <h2 className="text-2xl font-bold text-white mb-6 text-center">
+        <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 text-center">
           🎁 Tienda de Fortnite
         </h2>
         <input
           type="text"
           placeholder="🔍 Buscar objeto..."
-          className="w-full max-w-md mb-8 px-4 py-2 rounded bg-gray-700 text-white border border-gray-600 mx-auto block"
+          className="w-full max-w-md mb-6 sm:mb-8 px-3 sm:px-4 py-2 rounded bg-gray-700 text-white border border-gray-600 mx-auto block text-sm sm:text-base"
           onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
         />
 
@@ -656,11 +655,11 @@ return (
             if (!filtered.length) return null;
 
             return (
-              <div key={category} className="mb-12">
-                <h3 className="text-xl font-bold mb-4 uppercase text-center">
+              <div key={category} className="mb-8 sm:mb-12">
+                <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4 uppercase text-center">
                   {category}
                 </h3>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
                   {filtered.map((item, idx) => (
                     <ItemCard key={idx} item={item} onClick={handleItemClick} />
                   ))}
@@ -670,10 +669,8 @@ return (
           })
         )}
       </motion.div>
-    </div>
-  </div>
-);
-
+    </MainContent>
+  );
 };
 
 export default ProductsPage;

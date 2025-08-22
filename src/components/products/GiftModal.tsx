@@ -98,16 +98,16 @@ const GiftModal: React.FC<GiftModalProps> = ({ onClose, selectedItem, selectedAc
   };
 
   return (
-    <motion.div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-      <motion.div className="bg-[#1e293b] p-6 rounded-lg w-full max-w-md text-white relative">
-        <h2 className="text-2xl font-bold mb-3 text-center text-blue-400">
+    <motion.div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
+      <motion.div className="bg-[#1e293b] p-4 sm:p-6 rounded-lg w-full max-w-md text-white relative">
+        <h2 className="text-xl sm:text-2xl font-bold mb-3 text-center text-blue-400">
           🎁 Enviar Regalo
         </h2>
         
         <img 
           src={selectedItem.itemDisplay.image} 
           alt={selectedItem.itemDisplay.name} 
-          className="w-32 mx-auto mb-3 rounded shadow-lg" 
+          className="w-24 sm:w-32 mx-auto mb-3 rounded shadow-lg" 
         />
         
         <p className="text-center font-semibold mb-1">{selectedItem.itemDisplay.name}</p>
@@ -118,7 +118,7 @@ const GiftModal: React.FC<GiftModalProps> = ({ onClose, selectedItem, selectedAc
 
         <div className="mb-4">
           <label className="block text-sm mb-1">Buscar amigo:</label>
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             <input
               type="text"
               value={searchName}

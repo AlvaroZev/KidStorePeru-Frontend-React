@@ -14,6 +14,7 @@ import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import AdminOrdersPage from "./pages/AdminOrdersPage";
 import React from "react";
+import { SidebarProvider } from "./components/navigation/SidebarContext";
 
 export const API_URL = "https://backendregalos.kidstoreperu.com";
 //export const API_URL =  "http://localhost:8080";
@@ -79,15 +80,16 @@ const App = () => {
   }
 
   return (
-    <div className="flex h-screen bg-gray-900 text-gray-100 overflow-hidden">
-      <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 opacity-80" />
-        <div className="absolute inset-0 backdrop-blur-sm" />
-      </div>
+    <SidebarProvider>
+      <div className="flex h-screen bg-gray-900 text-gray-100 overflow-hidden">
+        <div className="fixed inset-0 z-0">
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 opacity-80" />
+          <div className="absolute inset-0 backdrop-blur-sm" />
+        </div>
 
-      {isAuthenticated && <Sidebar admin={isAdmin} />}
+        {isAuthenticated && <Sidebar admin={isAdmin} />}
 
-      <Routes>
+        <Routes>
         <Route
           path="/"
           element={
@@ -156,8 +158,9 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-      </Routes>
-    </div>
+        </Routes>
+      </div>
+    </SidebarProvider>
   );
 };
 

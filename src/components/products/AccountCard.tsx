@@ -72,7 +72,7 @@ const AccountCard: React.FC<AccountCardProps> = ({
   return (
     <div
       onClick={onClick}
-      className={`relative cursor-pointer border rounded-xl p-5 shadow-xl transition transform hover:scale-105 ${
+      className={`relative cursor-pointer border rounded-xl p-3 sm:p-5 shadow-xl transition transform hover:scale-105 ${
         selected
           ? "bg-blue-800 border-blue-500"
           : "bg-slate-800 border-slate-600"
@@ -87,12 +87,12 @@ const AccountCard: React.FC<AccountCardProps> = ({
         <FiRefreshCw className={`text-white text-sm ${isLoading ? 'animate-spin' : ''}`} />
       </button>
 
-      <h3 className="text-xl font-burbankBold mb-2 text-center text-pink-400">
+      <h3 className="text-lg sm:text-xl font-burbankBold mb-2 text-center text-pink-400">
         {account.displayName}
       </h3>
-      <p className="text-sm">💰 Pavos: {account.pavos}</p>
-      <p className="text-sm">📤 Enviados: {5-(account.remainingGifts  ?? 0)}</p>
-      <p className="text-sm">
+      <p className="text-xs sm:text-sm">💰 Pavos: {account.pavos}</p>
+      <p className="text-xs sm:text-sm">📤 Enviados: {5-(account.remainingGifts  ?? 0)}</p>
+      <p className="text-xs sm:text-sm">
         🎁 Disponibles: {account.remainingGifts ?? 5}
       </p>
     </div>

@@ -6,6 +6,7 @@ import Header from "../components/common/Header";
 import OrdersTable from "../components/orders/OrdersTable";
 import { API_URL } from "../App";
 import { rawTransactionsResponse, Transaction } from "../components/orders/types";
+import MainContent from "../components/navigation/MainContent";
 
 const AdminOrdersPage: React.FC = () => {
 	const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -47,14 +48,12 @@ const AdminOrdersPage: React.FC = () => {
 	}, []);
 
 	return (
-		<div className="flex">
-			{/* Main content area */}
-			<div className="flex-1 min-h-screen bg-gray-900 pt-20 px-6 overflow-y-auto ml-64">
-				<motion.div className="bg-gray-800 bg-opacity-50 backdrop-blur-md p-6 rounded-xl shadow-lg w-full max-w-7xl border border-gray-700">
-					<h1 className="text-2xl font-bold text-white mb-6 text-center">
+		<MainContent>
+				<motion.div className="bg-gray-800 bg-opacity-50 backdrop-blur-md p-4 sm:p-6 rounded-xl shadow-lg w-full max-w-7xl border border-gray-700">
+					<h1 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 text-center">
 						📊 Historial de Órdenes - Administrador
 					</h1>
-					<div className="text-center text-gray-400 mb-6">
+					<div className="text-center text-gray-400 mb-4 sm:mb-6">
 						{transactions.length === 0 ? (
 							<p>No hay transacciones disponibles</p>
 						) : (
@@ -63,8 +62,7 @@ const AdminOrdersPage: React.FC = () => {
 					</div>
 					<OrdersTable transactions={transactions} />
 				</motion.div>
-			</div>
-		</div>
+		</MainContent>
 	);
 };
 

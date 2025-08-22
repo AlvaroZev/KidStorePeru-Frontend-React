@@ -7,6 +7,7 @@ import { API_URL } from "../App";
 import AccountsTable from "../components/accounts/AccontsTable";
 import AddAccountModal from "../components/accounts/AddAccountModal";
 import { Account, rawAccount, rawAccountResponse } from "../components/accounts";
+import MainContent from "../components/navigation/MainContent";
 
 const FortniteAdminAccountsPage = () => {
 	const [accounts, setAccounts] = useState<Account[]>([]);
@@ -58,9 +59,7 @@ const FortniteAdminAccountsPage = () => {
 	}, []);
 
 	return (
-		<div className="flex">
-			{/* Main content area */}
-			<div className="flex-1 min-h-screen bg-gray-900 pt-20 px-6 overflow-y-auto ml-64">
+		<MainContent>
 				{showAddModal && (
 					<AddAccountModal
 						onClose={() => setShowAddModal(false)}
@@ -68,11 +67,11 @@ const FortniteAdminAccountsPage = () => {
 					/>
 				)}
 
-				<motion.div className="bg-gray-800 bg-opacity-50 backdrop-blur-md p-6 rounded-xl shadow-lg w-full max-w-7xl border border-gray-700">
-					<h1 className="text-2xl font-bold text-white mb-6 text-center">
+				<motion.div className="bg-gray-800 bg-opacity-50 backdrop-blur-md p-4 sm:p-6 rounded-xl shadow-lg w-full max-w-7xl border border-gray-700">
+					<h1 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 text-center">
 						🎮 Cuentas de Fortnite - Administrador
 					</h1>
-					<div className="text-center text-gray-400 mb-6">
+					<div className="text-center text-gray-400 mb-4 sm:mb-6">
 						{accounts.length === 0 ? (
 							<p>No hay cuentas de Fortnite registradas</p>
 						) : (
@@ -82,15 +81,14 @@ const FortniteAdminAccountsPage = () => {
 					<div className='flex justify-end mb-4'>
 						<button
 							onClick={() => setShowAddModal(true)}
-							className='flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded font-semibold shadow'
+							className='flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-3 sm:px-4 py-2 rounded font-semibold shadow text-sm sm:text-base'
 						>
 							➕ Añadir Cuenta
 						</button>
 					</div>
 					<AccountsTable accounts={accounts} onDelete={deleteAccount} />
 				</motion.div>
-			</div>
-		</div>
+		</MainContent>
 	);
 };
 
