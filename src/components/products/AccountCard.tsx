@@ -4,12 +4,15 @@ import { Account } from "../accounts";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { API_URL } from "../../App";
+import GiftSlotStatusInline from "./GiftSlotStatusInline";
+import "./GiftSlotStatus.css";
 
 interface AccountCardProps {
   account: Account;
   selected?: boolean;
   onClick?: () => void;
   onRefresh?: () => void;
+  showGiftStatus?: boolean;
 }
 
 const AccountCard: React.FC<AccountCardProps> = ({
@@ -17,6 +20,7 @@ const AccountCard: React.FC<AccountCardProps> = ({
   selected,
   onClick,
   onRefresh,
+  showGiftStatus = false,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const token = Cookies.get("session");
@@ -72,7 +76,7 @@ const AccountCard: React.FC<AccountCardProps> = ({
   return (
     <div
       onClick={onClick}
-      className={`relative cursor-pointer border rounded-xl p-3 sm:p-5 shadow-xl transition transform hover:scale-105 ${
+      className={`account-card relative cursor-pointer border rounded-xl p-3 sm:p-4 shadow-xl transition transform hover:scale-105 min-h-[160px] ${
         selected
           ? "bg-blue-800 border-blue-500"
           : "bg-slate-800 border-slate-600"
@@ -81,20 +85,33 @@ const AccountCard: React.FC<AccountCardProps> = ({
       <button
         onClick={handleRefresh}
         disabled={isLoading}
-        className="absolute top-1 right-1 bg-slate-700 p-1 rounded-full hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="absolute top-1 right-1 bg-slate-700 p-1 rounded-full hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed z-10"
         title="Actualizar pavos"
       >
         <FiRefreshCw className={`text-white text-sm ${isLoading ? 'animate-spin' : ''}`} />
       </button>
 
-      <h3 className="text-lg sm:text-xl font-burbankBold mb-2 text-center text-pink-400">
-        {account.displayName}
-      </h3>
-      <p className="text-xs sm:text-sm">💰 Pavos: {account.pavos}</p>
-      <p className="text-xs sm:text-sm">📤 Enviados: {5-(account.remainingGifts  ?? 0)}</p>
-      <p className="text-xs sm:text-sm">
-        🎁 Disponibles: {account.remainingGifts ?? 5}
-      </p>
+      <div className="account-card-content">
+        <h3 className="text-lg sm:text-xl font-burbankBold mb-2 text-center text-pink-400">
+          {account.displayName}
+        </h3>
+        <p className="text-xs sm:text-sm mb-2">💰 Pavos: {account.pavos}</p>
+        
+        {showGiftStatus ? (
+          <div className="gift-status-container">
+            <GiftSlotStatusInline 
+              giftSlotStatus={account.giftSlotStatus}
+            />
+          </div>
+        ) : (
+          <>
+            <p className="text-xs sm:text-sm">📤 Enviados: {5-(account.remainingGifts  ?? 0)}</p>
+            <p className="text-xs sm:text-sm">
+              🎁 Disponibles: {account.remainingGifts ?? 5}
+            </p>
+          </>
+        )}
+      </div>
     </div>
   );
 };

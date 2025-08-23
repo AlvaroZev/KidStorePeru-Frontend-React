@@ -1,11 +1,12 @@
 // src/components/GiftModal.tsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ShopEntry } from "../../pages/ProductsPage";
 import { Account } from "../accounts";
 import axios from "axios";
 import { API_URL } from "../../App";
 import Cookies from "js-cookie";
+import GiftSlotStatusInline from "./GiftSlotStatusInline";
 
 export interface Friend {
   id: string;
@@ -25,6 +26,7 @@ const GiftModal: React.FC<GiftModalProps> = ({ onClose, selectedItem, selectedAc
   const [searchResult, setSearchResult] = useState<Friend | null>(null);
   const [searchStatus, setSearchStatus] = useState<"none" | "loading" | "error" | "success">("none");
   const [errorMessage, setErrorMessage] = useState("");
+  const [giftSlotStatus, setGiftSlotStatus] = useState<any>(null);
 
   const token = Cookies.get("session");
 
@@ -93,6 +95,13 @@ const GiftModal: React.FC<GiftModalProps> = ({ onClose, selectedItem, selectedAc
 
   const handleSend = () => {
     if (!searchResult) return;
+    
+    // Check if gift slots are available
+    if (selectedAccount.giftSlotStatus && selectedAccount.giftSlotStatus.remaining_gifts <= 0) {
+      setErrorMessage("No hay slots de regalo disponibles. Espera a que se complete el cooldown.");
+      return;
+    }
+    
     onSend(searchResult, "KIDDX"); // Default creator code
     onClose();
   };
@@ -115,6 +124,13 @@ const GiftModal: React.FC<GiftModalProps> = ({ onClose, selectedItem, selectedAc
         <p className="text-center text-sm mb-2">💸 Precio: {selectedItem.finalPrice} V-BUCKS</p>
         
         <p className="text-center text-sm mb-4 text-gray-300">📤 Enviando desde: <span className="text-blue-400 font-semibold">{selectedAccount.displayName}</span></p>
+
+        {/* Gift Slot Status */}
+        <div className="mb-4">
+          <GiftSlotStatusInline 
+            giftSlotStatus={selectedAccount.giftSlotStatus}
+          />
+        </div>
 
         <div className="mb-4">
           <label className="block text-sm mb-1">Buscar amigo:</label>
@@ -149,10 +165,10 @@ const GiftModal: React.FC<GiftModalProps> = ({ onClose, selectedItem, selectedAc
 
         <button
           onClick={handleSend}
-          disabled={searchStatus !== "success"}
+          disabled={searchStatus !== "success" || (selectedAccount.giftSlotStatus && selectedAccount.giftSlotStatus.remaining_gifts <= 0)}
           className="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded font-semibold mb-2 disabled:bg-gray-600 disabled:cursor-not-allowed"
         >
-          Enviar Regalo
+          {selectedAccount.giftSlotStatus && selectedAccount.giftSlotStatus.remaining_gifts <= 0 ? "Esperando Cooldown..." : "Enviar Regalo"}
         </button>
 
         <button

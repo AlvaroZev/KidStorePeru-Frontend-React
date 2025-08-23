@@ -465,6 +465,16 @@ const ProductsPage: React.FC = () => {
     if (!selectedItem || !selectedAccount) return;
 
     try {
+      // Check gift slot status from account data
+      if (selectedAccount.giftSlotStatus && selectedAccount.giftSlotStatus.remaining_gifts <= 0) {
+        setLastGiftResponse({
+          success: false,
+          error: "No hay slots de regalo disponibles. Espera a que se complete el cooldown."
+        });
+        setShowErrorModal(true);
+        return;
+      }
+
       const res = await axios.post(
         `${API_URL}/sendGift`,
         {
@@ -499,6 +509,8 @@ const ProductsPage: React.FC = () => {
         setLastGiftResponse(data);
         setShowGiftModal(false);
         setShowSuccessModal(true);
+        // Refresh accounts to update gift counts
+        fetchAccounts();
       } else {
         setLastGiftResponse(data);
         setShowErrorModal(true);
@@ -524,6 +536,7 @@ const ProductsPage: React.FC = () => {
             displayName: acc.displayName,
             pavos: acc.pavos ?? 0,
             remainingGifts: acc.remainingGifts ?? 0,
+            giftSlotStatus: acc.giftSlotStatus,
           })
         );
         console.log("Fetched accounts:", parsedAccounts);
@@ -562,7 +575,9 @@ return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-gray-800 rounded-2xl p-6 w-full max-w-md">
             <h2 className="text-xl text-red-500 mb-4">Error</h2>
-            <p className="mb-2 text-white">No se pudo enviar el regalo.</p>
+            <p className="mb-2 text-white">
+              {lastGiftResponse?.error || "No se pudo enviar el regalo."}
+            </p>
             <button
               onClick={() => setShowErrorModal(false)}
               className="px-4 py-2 bg-gray-600 rounded text-white"
@@ -618,7 +633,7 @@ return (
         <h1 className="text-xl sm:text-2xl font-bold text-white mb-4 text-center">
           🛍️ Selecciona una cuenta
         </h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 mb-4 sm:mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6 mb-4 sm:mb-6">
           {accounts.length > 0 ? (
             accounts.map((account) => (
               <AccountCard
@@ -626,6 +641,8 @@ return (
                 account={account}
                 onClick={() => setSelectedAccount(account)}
                 selected={selectedAccount?.id === account.id}
+                onRefresh={fetchAccounts}
+                showGiftStatus={true}
               />
             ))
           ) : (

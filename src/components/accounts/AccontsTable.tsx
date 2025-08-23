@@ -2,13 +2,15 @@ import React, { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Search } from "lucide-react";
 import { Account } from "./types";
+import GiftSlotStatusInline from "../products/GiftSlotStatusInline";
 
 interface Props {
 	accounts: Account[];
 	onDelete: (id: string) => void;
+	showGiftStatus?: boolean;
 }
 
-const AccountsTable: React.FC<Props> = ({ accounts, onDelete }) => {
+const AccountsTable: React.FC<Props> = ({ accounts, onDelete, showGiftStatus = false }) => {
 	const [searchTerm, setSearchTerm] = useState("");
 
 	const filteredAccounts = useMemo(() => {
@@ -56,9 +58,15 @@ const AccountsTable: React.FC<Props> = ({ accounts, onDelete }) => {
 							<th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
 								Pavos
 							</th>
-							<th className="hidden sm:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-								Regalos Restantes
-							</th>
+							{showGiftStatus ? (
+								<th className="hidden sm:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+									Estado de Regalos
+								</th>
+							) : (
+								<th className="hidden sm:table-cell px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+									Regalos Restantes
+								</th>
+							)}
 							<th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
 								Acciones
 							</th>
@@ -79,9 +87,17 @@ const AccountsTable: React.FC<Props> = ({ accounts, onDelete }) => {
 							<td className="px-3 sm:px-6 py-4 whitespace-nowrap text-gray-300">
 								{acc.pavos}
 							</td>
-							<td className="hidden sm:table-cell px-3 sm:px-6 py-4 whitespace-nowrap text-gray-300">
-								{acc.remainingGifts}
-							</td>
+							{showGiftStatus ? (
+								<td className="hidden sm:table-cell px-3 sm:px-6 py-4">
+									<GiftSlotStatusInline 
+										giftSlotStatus={acc.giftSlotStatus}
+									/>
+								</td>
+							) : (
+								<td className="hidden sm:table-cell px-3 sm:px-6 py-4 whitespace-nowrap text-gray-300">
+									{acc.remainingGifts}
+								</td>
+							)}
 							<td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-300">
 									<button
 										className="bg-red-600 hover:bg-red-700 px-3 py-1 text-xs rounded font-semibold"

@@ -29,6 +29,7 @@ const FortniteAdminAccountsPage = () => {
 					displayName: acc.displayName,
 					pavos: acc.pavos ?? 0,
 					remainingGifts: acc.remainingGifts ?? 0,
+					giftSlotStatus: acc.giftSlotStatus,
 				}));
 				console.log("Fetched accounts:", parsedAccounts);
 				setAccounts(parsedAccounts);
@@ -86,7 +87,7 @@ const FortniteAdminAccountsPage = () => {
 							➕ Añadir Cuenta
 						</button>
 					</div>
-					<AccountsTable accounts={accounts} onDelete={deleteAccount} />
+					<AccountsTable accounts={accounts} onDelete={deleteAccount} showGiftStatus={true} />
 				</motion.div>
 		</MainContent>
 	);
