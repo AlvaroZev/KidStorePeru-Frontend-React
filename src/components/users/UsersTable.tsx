@@ -50,7 +50,7 @@ const UsersTable: React.FC<Props> = ({ users, onDelete, onUpdate }) => {
       </div>
 
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-700">
+        <table className="min-w-full divide-y divide-gray-700 font-burbankBold">
           <thead>
             <tr>
               <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
@@ -101,13 +101,13 @@ const UsersTable: React.FC<Props> = ({ users, onDelete, onUpdate }) => {
 
                 <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                   <button
-                    className="bg-blue-600 hover:bg-blue-700 px-3 py-1 text-xs rounded font-semibold mr-2"
+                    className="bg-blue-600 hover:bg-blue-700 px-3 py-1 text-xs rounded font-burbankBold mr-2"
                     onClick={() => onUpdate(user)}
                   >
                     Editar
                   </button>
                   <button
-                    className="bg-red-600 hover:bg-red-700 px-3 py-1 text-xs rounded font-semibold"
+                    className="bg-red-600 hover:bg-red-700 px-3 py-1 text-xs rounded font-burbankBold"
                     onClick={() => handleDelete(user.id)}
                   >
                     Eliminar

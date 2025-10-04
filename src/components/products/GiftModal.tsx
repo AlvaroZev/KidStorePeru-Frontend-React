@@ -109,7 +109,7 @@ const GiftModal: React.FC<GiftModalProps> = ({ onClose, selectedItem, selectedAc
   return (
     <motion.div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
       <motion.div className="bg-[#1e293b] p-4 sm:p-6 rounded-lg w-full max-w-md text-white relative">
-        <h2 className="text-xl sm:text-2xl font-bold mb-3 text-center text-blue-400">
+        <h2 className="text-xl sm:text-2xl font-burbankBlack mb-3 text-center text-blue-400">
           🎁 Enviar Regalo
         </h2>
         

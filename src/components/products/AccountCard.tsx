@@ -105,8 +105,8 @@ const AccountCard: React.FC<AccountCardProps> = ({
           </div>
         ) : (
           <>
-            <p className="text-xs sm:text-sm">📤 Enviados: {5-(account.remainingGifts  ?? 0)}</p>
-            <p className="text-xs sm:text-sm">
+            <p className="text-xs sm:text-sm font-burbankBold">📤 Enviados: {5-(account.remainingGifts  ?? 0)}</p>
+            <p className="text-xs sm:text-sm font-burbankBold">
               🎁 Disponibles: {account.remainingGifts ?? 5}
             </p>
           </>

@@ -11,8 +11,10 @@ import {
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
+// @ts-ignore
 import logo from "../../../assets/Banner.png";
 import { useSidebar } from "./SidebarContext";
+import React from "react";
 
 const Sidebar = ({ admin }: { admin: boolean }) => {
   const { isSidebarOpen, setIsSidebarOpen } = useSidebar();

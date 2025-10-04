@@ -652,7 +652,7 @@ return (
           )}
         </div>
 
-        <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 text-center">
+        <h2 className="text-xl sm:text-2xl font-burbankBig text-white mb-4 sm:mb-6 text-center">
           🎁 Tienda de Fortnite
         </h2>
         <input

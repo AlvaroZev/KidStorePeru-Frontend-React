@@ -113,7 +113,7 @@ const UsersPage = () => {
         )}
 
         <motion.div className="bg-gray-800 bg-opacity-50 backdrop-blur-md p-4 sm:p-6 rounded-xl shadow-lg w-full max-w-7xl border border-gray-700">
-          <h1 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 text-center">
+          <h1 className="text-xl sm:text-2xl font-burbankBlack text-white mb-4 sm:mb-6 text-center">
             👥 Panel de Administrador de Usuarios
           </h1>
           <div className="text-center text-gray-400 mb-4 sm:mb-6">
@@ -126,7 +126,7 @@ const UsersPage = () => {
           <div className='flex justify-end mb-4'>
             <button
               onClick={() => setShowAddModal(true)}
-              className='flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-3 sm:px-4 py-2 rounded font-semibold shadow text-sm sm:text-base'
+              className='flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-3 sm:px-4 py-2 rounded font-burbankBold shadow text-sm sm:text-base'
             >
               ➕ Añadir Usuario
             </button>

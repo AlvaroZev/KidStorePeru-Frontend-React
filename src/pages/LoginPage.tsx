@@ -71,7 +71,7 @@ const LoginPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
             >
-                <h2 className='text-2xl font-bold text-white mb-6 text-center'>Iniciar Sesión</h2>
+                <h2 className='text-2xl font-burbankBig text-white mb-6 text-center'>Iniciar Sesión</h2>
                 <form className='space-y-5' onSubmit={handleSubmit}>
                     <div>
                         <label className='block text-sm text-gray-300 mb-1' htmlFor='username'>
@@ -114,12 +114,12 @@ const LoginPage = () => {
                         </div>
                     </div>
 
-                    {error && <p className='text-red-400 text-sm text-center'>{error}</p>}
+                    {error && <p className='text-red-400 text-sm text-center font-burbankBold'>{error}</p>}
 
                     <div className='flex items-center justify-between'>
                         <button
                             type='submit'
-                            className='bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg w-full transition-all'
+                            className='bg-blue-600 hover:bg-blue-700 text-white font-burbankBold py-2 px-4 rounded-lg w-full transition-all'
                         >
                             Ingresar
                         </button>

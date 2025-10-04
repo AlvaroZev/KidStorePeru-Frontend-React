@@ -69,7 +69,7 @@ const GiftSlotStatusInline: React.FC<GiftSlotStatusInlineProps> = ({
       <div className="flex items-center justify-between text-xs">
         <span className="flex items-center gap-1">
           <Gift className={`${isAvailable ? 'text-green-400' : 'text-yellow-400'}`} size={12} />
-          <span className={`font-semibold ${isAvailable ? 'text-green-400' : 'text-yellow-400'}`}>
+          <span className={`font-burbankBold ${isAvailable ? 'text-green-400' : 'text-yellow-400'}`}>
             {giftSlotStatus.remaining_gifts}/{giftSlotStatus.max_gifts}
           </span>
         </span>
@@ -95,7 +95,7 @@ const GiftSlotStatusInline: React.FC<GiftSlotStatusInlineProps> = ({
       </div>
       
              <div className="text-center">
-         <span className={`text-xs font-semibold ${
+         <span className={`text-xs font-burbankBold ${
            isAvailable ? 'text-green-400' : 'text-yellow-400'
          }`}>
            {isAvailable ? '✅ Listo' : `⏳ ${timeUntilNext}`}

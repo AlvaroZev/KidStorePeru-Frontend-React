@@ -8,9 +8,9 @@ interface Props {
 const OrdersTable: React.FC<Props> = ({ transactions }) => {
   return (
     <div className="bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-4 sm:p-6 border border-gray-700">
-      <h2 className="text-lg sm:text-xl font-semibold text-gray-100 mb-4">Historial de Órdenes</h2>
+      <h2 className="text-lg sm:text-xl font-burbankMedium text-gray-100 mb-4">Historial de Órdenes</h2>
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-700">
+        <table className="min-w-full divide-y divide-gray-700 font-burbankBold">
           <thead>
             <tr>
               <th className="px-2 sm:px-4 py-2 text-left text-xs text-gray-400 uppercase">Objeto</th>

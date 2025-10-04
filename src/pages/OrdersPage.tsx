@@ -50,7 +50,7 @@ const OrdersPage: React.FC = () => {
 	return (
 		<MainContent>
 				<motion.div className="bg-gray-800 bg-opacity-50 backdrop-blur-md p-4 sm:p-6 rounded-xl shadow-lg w-full max-w-7xl border border-gray-700">
-					<h1 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 text-center">
+					<h1 className="text-xl sm:text-2xl font-burbankBlack text-white mb-4 sm:mb-6 text-center">
 						📋 Historial de Órdenes
 					</h1>
 					<div className="text-center text-gray-400 mb-4 sm:mb-6">
