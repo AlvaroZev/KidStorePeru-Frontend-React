@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FiRefreshCw } from "react-icons/fi";
+import { FiRefreshCw, FiPlus } from "react-icons/fi";
 import { Account } from "../accounts";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -12,6 +12,7 @@ interface AccountCardProps {
   selected?: boolean;
   onClick?: () => void;
   onRefresh?: () => void;
+  handleAddPavos?: () => void;
   showGiftStatus?: boolean;
 }
 
@@ -20,6 +21,7 @@ const AccountCard: React.FC<AccountCardProps> = ({
   selected,
   onClick,
   onRefresh,
+  handleAddPavos,
   showGiftStatus = false,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -73,6 +75,7 @@ const AccountCard: React.FC<AccountCardProps> = ({
     }
   };
 
+
   return (
     <div
       onClick={onClick}
@@ -91,7 +94,15 @@ const AccountCard: React.FC<AccountCardProps> = ({
         <FiRefreshCw className={`text-white text-sm ${isLoading ? 'animate-spin' : ''}`} />
       </button>
 
-      <div className="account-card-content">
+      <button
+        onClick={handleAddPavos}
+        className="absolute top-1 right-8 bg-green-600 p-1 rounded-full hover:bg-green-500 z-10"
+        title="Agregar pavos"
+      >
+        <FiPlus className="text-white text-sm" />
+      </button>
+
+      <div className="account-card-content pt-8">
         <h3 className="text-lg sm:text-xl font-burbankBold mb-2 text-center text-pink-400">
           {account.displayName}
         </h3>

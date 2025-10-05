@@ -7,6 +7,7 @@ import { API_URL } from "../App";
 import ItemCard from "../components/products/ItemCard";
 import AccountCard from "../components/products/AccountCard";
 import GiftModal from "../components/products/GiftModal";
+import PavosModal from "../components/products/PavosModal";
 import {
   Account,
   rawAccount,
@@ -338,10 +339,12 @@ const ProductsPage: React.FC = () => {
   >({});
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
+  const [selectedAccountPavos, setSelectedAccountPavos] = useState<Account | null>(null);
   const [selectedItem, setSelectedItem] = useState<ShopEntry | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
   const [showGiftModal, setShowGiftModal] = useState(false);
+  const [showPavosModal, setShowPavosModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [lastGiftResponse, setLastGiftResponse] = useState<{
@@ -557,6 +560,12 @@ const ProductsPage: React.FC = () => {
     setShowGiftModal(true);
   };
 
+  const handlePavosClick = (account: Account) => {
+    console.log("handlePavosClick", account);
+    setSelectedAccountPavos(account);
+    setShowPavosModal(true);
+  };
+
 return (
   <MainContent>
       {showGiftModal && selectedItem && selectedAccount && (
@@ -568,6 +577,24 @@ return (
           selectedItem={selectedItem}
           selectedAccount={selectedAccount}
           onSend={sendGift}
+        />
+      )}
+
+      {showPavosModal && selectedAccountPavos && (
+        <PavosModal
+          account={selectedAccountPavos}
+          onClose={() => {
+            setShowPavosModal(false);
+            fetchAccounts();
+          }}
+          onRefresh={fetchAccounts}
+          onPavosUpdated={(updated) => {
+            // Optimistically update the accounts list
+            setAccounts((prev) => prev.map(a => a.id === updated.account_id ? { ...a, pavos: updated.new_pavos } : a));
+            // Also update selected account references
+            setSelectedAccount((prev) => prev && prev.id === updated.account_id ? { ...prev, pavos: updated.new_pavos } as Account : prev);
+            setSelectedAccountPavos((prev) => prev && prev.id === updated.account_id ? { ...prev, pavos: updated.new_pavos } as Account : prev);
+          }}
         />
       )}
 
@@ -643,6 +670,7 @@ return (
                 selected={selectedAccount?.id === account.id}
                 onRefresh={fetchAccounts}
                 showGiftStatus={true}
+                handleAddPavos={() => handlePavosClick(account)}
               />
             ))
           ) : (
