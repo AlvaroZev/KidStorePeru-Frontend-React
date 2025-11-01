@@ -16,7 +16,7 @@ import AdminOrdersPage from "./pages/AdminOrdersPage";
 import React from "react";
 import { SidebarProvider } from "./components/navigation/SidebarContext";
 
-export const API_URL = "https://backendregalos.kidstoreperu.com";
+export const API_URL = import.meta.env.VITE_API_URL;
 //export const API_URL =  "http://localhost:8080";
 
 interface SessionPayload {
